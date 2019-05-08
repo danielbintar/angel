@@ -28,7 +28,7 @@ func TestPublic(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	tests := []route{
-		{"GET", "/healthz", http.StatusOK},
+		{ "GET", "/healthz", http.StatusOK },
 	}
 
 	for _, test := range tests {

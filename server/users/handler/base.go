@@ -13,7 +13,7 @@ type baseHandler struct {
 }
 
 func NewBaseHandler(m *users.UserManager) *baseHandler {
-	return &baseHandler{
+	return &baseHandler {
 		m: m,
 	}
 }
