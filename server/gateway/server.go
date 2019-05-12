@@ -1,14 +1,18 @@
 package gateway
 
 import (
-	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
+
+	url_config "github.com/danielbintar/angel/server/gateway/url"
 
 	"github.com/rs/cors"
 )
 
 type Server struct {
 	CORS *cors.Cors
+	Urls map[string]string
 }
 
 func NewServer() *Server {
@@ -21,11 +25,19 @@ func NewServer() *Server {
 		AllowCredentials: true,
 		MaxAge:           86400,
 	})
+	s.Urls = url_config.Instance()
 
 	return s
 }
 
-// TODO: DO SOMETHING!
-func (s *Server) ServeHTTP(_ http.ResponseWriter, _ *http.Request) {
-	log.Println("Incoming Request")
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	target := s.Urls[r.URL.Path]
+	if target == "" {
+		http.NotFound(w, r)
+		return
+	}
+
+
+	uri, _ := url.Parse(target)
+	httputil.NewSingleHostReverseProxy(uri).ServeHTTP(w, r)
 }

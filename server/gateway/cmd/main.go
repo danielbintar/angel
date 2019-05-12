@@ -6,9 +6,12 @@ import (
 	"time"
 
 	"github.com/danielbintar/angel/server/gateway"
+
+	"github.com/subosito/gotenv"
 )
 
 func main() {
+	gotenv.Load()
 	s := gateway.NewServer()
 
 	h := &http.Server {
