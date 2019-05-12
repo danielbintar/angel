@@ -1,0 +1,3 @@
+test:
+	./script/migrate-test
+	ENVIRONMENT=test go test -v -coverprofile ./test-cov ./...
