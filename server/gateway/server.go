@@ -37,7 +37,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	uri, _ := url.Parse(target)
 	httputil.NewSingleHostReverseProxy(uri).ServeHTTP(w, r)
 }
