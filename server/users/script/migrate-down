@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "Start down migrating"
+START_DATE="$(date +%s)"
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # TODO: LEARN WTF IS GOING ON HERE
+BASE="${DIR:0:-7}"
+
+echo "Running 0_create_database"
+go run $BASE/db/migration/0_create_database/main.go down
+
+END_DATE="$(date +%s)"
+DIFF="$(($END_DATE-$START_DATE))"
+echo "Finish in $DIFF seconds"

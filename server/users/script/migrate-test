@@ -1,0 +1,25 @@
+#!/bin/bash
+
+START_DATE="$(date +%s)"
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # TODO: LEARN WTF IS GOING ON HERE
+BASE="${DIR:0:-7}"
+echo "Start up migrating"
+
+echo "Running 0_create_database"
+ENVIRONMENT=TEST go run $BASE/db/migration/0_create_database/main.go down
+
+for pfullpath in $BASE/db/migration/*; do
+	if [[ $pfullpath == *base.go ]]; then
+		continue
+	fi
+
+	for fullpath in $pfullpath/*; do
+		echo "Running ${pfullpath##*/}"
+		ENVIRONMENT=TEST go run $fullpath
+	done
+done
+
+END_DATE="$(date +%s)"
+DIFF="$(($END_DATE-$START_DATE))"
+echo "Finish in $DIFF seconds"

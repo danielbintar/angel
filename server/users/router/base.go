@@ -15,4 +15,5 @@ func Public(r *httprouter.Router, m *users.UserManager) {
 	h := handler.NewBaseHandler(m)
 
 	r.GET("/healthz", h.Healthz)
+	r.POST("/users", h.CreateUser)
 }
