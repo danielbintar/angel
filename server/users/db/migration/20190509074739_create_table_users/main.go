@@ -8,7 +8,6 @@ import (
 	"github.com/subosito/gotenv"
 )
 
-// TODO: MAKE THIS WORK FROM ANYWHERE
 func main() {
 	gotenv.Load()
 
