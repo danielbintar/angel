@@ -41,7 +41,6 @@ func TestHealthz(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	gotenv.Load("../.env")
 	t.Run("no body", func(t *testing.T) {
 		m := users.Instance()
 		h := handler.NewBaseHandler(m)
@@ -135,7 +134,27 @@ func TestCreateUser(t *testing.T) {
 		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
 	})
 
+	t.Run("mysql problem", func(t *testing.T) {
+		m := users.Instance()
+		h := handler.NewBaseHandler(m)
+
+		body := []byte(`{"username":"123456","password":"123456"}`)
+		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+
+		router := httprouter.New()
+		router.POST("/users", h.CreateUser)
+
+		router.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusServiceUnavailable, rr.Code)
+	})
+
 	t.Run("success", func(t *testing.T) {
+		gotenv.Load("../.env")
 		m := users.Instance()
 		h := handler.NewBaseHandler(m)
 

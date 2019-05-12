@@ -50,7 +50,7 @@ func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 	var form user.CreateForm
 
 	if r.Body == nil {
-		http.Error(w, "some error", http.StatusUnprocessableEntity)
+		http.Error(w, "body is required", http.StatusUnprocessableEntity)
 		return
 	}
 

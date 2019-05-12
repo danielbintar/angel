@@ -11,6 +11,7 @@ import (
 )
 
 func TestDB(t *testing.T) {
+	assert.NotNil(t, db.DB())
 	gotenv.Load("../.env")
 	assert.NotNil(t, db.DB())
 }
