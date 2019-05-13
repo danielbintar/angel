@@ -1,0 +1,5 @@
+prefix: /users
+routes:
+  - /asd
+  - /
+  - /asd/asd

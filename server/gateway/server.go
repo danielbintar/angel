@@ -5,7 +5,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	url_config "github.com/danielbintar/angel/server/gateway/url"
+	"github.com/danielbintar/angel/server/gateway/url_config"
 
 	"github.com/rs/cors"
 )
@@ -25,7 +25,7 @@ func NewServer() *Server {
 		AllowCredentials: true,
 		MaxAge:           86400,
 	})
-	s.Urls = url_config.Instance()
+	s.Urls = url_config.Instance("./url_config")
 
 	return s
 }
