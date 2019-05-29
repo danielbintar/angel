@@ -10,13 +10,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type CreateForm struct {
+type LoginForm struct {
 	Username string `json:"username" validate:"nonzero"`
 	Password string `json:"password" validate:"nonzero"`
 	Manager  *users.UserManager `    validate:"nonzero"`
 }
 
-func (self *CreateForm) Validate() *service.Error {
+func (self *LoginForm) Validate() *service.Error {
 	if err := validator.Validate(self); err != nil {
 		return &service.Error { Error: err.Error() }
 	}
@@ -24,24 +24,19 @@ func (self *CreateForm) Validate() *service.Error {
 	return nil
 }
 
-func (self *CreateForm) Perform() (interface{}, *service.Error) {
+func (self *LoginForm) Perform() (interface{}, *service.Error) {
 	user := &model.User{Username: self.Username}
 
 	if err := self.Manager.DB.Where(&user).First(&user).Error; err != nil {
-		if err.Error() != "record not found" {
+		if err.Error() == "record not found" {
+			return nil, &service.Error { Error: "wrong username or password" }
+		} else {
 			return nil, &service.Error { Error: err.Error(), Private: true }
 		}
-	} else {
-		return user, &service.Error { Error: "username already used" }
 	}
 
-	// 0 for using default cost
-	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(self.Password), 0)
-	user.Username = self.Username
-	user.Password = string(encryptedPassword)
-
-	if err := self.Manager.DB.Create(&user).Error; err != nil {
-		return nil, &service.Error { Error: err.Error(), Private: true }
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(self.Password)); err != nil {
+		return nil, &service.Error { Error: "wrong username or password" }
 	}
 
 	return user, nil

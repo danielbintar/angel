@@ -16,4 +16,5 @@ func Public(r *httprouter.Router, m *users.UserManager) {
 
 	r.GET("/healthz", h.Healthz)
 	r.POST("/users", h.CreateUser)
+	r.POST("/users/my-session", h.Login)
 }
