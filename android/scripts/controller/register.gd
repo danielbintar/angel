@@ -5,7 +5,7 @@ var password_form
 var flash_label
 var last_hide_flash
 var http_request
-var base
+var config
 
 const HIDE_FLASH_TIMER = 4
 const HIDE_FLASH_MIN_TIME = 3800
@@ -17,7 +17,7 @@ func _ready():
 	flash_label.hide()
 	username_form = get_node("Username")
 	password_form = get_node("Password")
-	base = get_node("/root/Config")
+	config = get_node("/root/Config")
 	http_request = get_node("HTTPRequest")
 	get_node("Register").connect("pressed", self, "register")
 	http_request.connect("request_completed", self, "on_HTTPRequest_request_completed")
@@ -35,7 +35,7 @@ func register():
 	var headers = ["Content-Type: application/json"]
 	var use_ssl = false
 
-	http_request.request(base.API_URL + "users", headers, use_ssl, HTTPClient.METHOD_POST, JSON.print(data))
+	http_request.request(config.API_URL + "users", headers, use_ssl, HTTPClient.METHOD_POST, JSON.print(data))
 
 func on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 	requesting = false
