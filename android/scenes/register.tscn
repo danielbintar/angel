@@ -48,7 +48,7 @@ custom_fonts/font = SubResource( 2 )
 text = "password"
 align = 1
 
-[node name="ErrorLabel" type="Label" parent="."]
+[node name="Flash" type="Label" parent="."]
 margin_left = 840.964
 margin_top = 539.722
 margin_right = 1172.96
