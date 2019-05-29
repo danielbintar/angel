@@ -19,6 +19,10 @@ config/name="android"
 run/main_scene="res://scenes/register.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Config="*res://scripts/autoload/config.gd"
+
 [display]
 
 window/size/width=1920
