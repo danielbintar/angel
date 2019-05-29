@@ -10,6 +10,7 @@ github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/danielbintar/angel v0.0.0-20190507144859-101c57cf7475 h1:a6y0DhELUvo67sd4+uqabBF7jUkcMgKPqVA0IuTUf0w=
+github.com/danielbintar/angel v0.0.0-20190529023000-4e075f9f534a h1:gq6Jif85iUeIF0P2EklDYEFa9mubnG0B2EJU1mLPO4E=
 github.com/danielbintar/qwe-server v0.0.0-20190228023600-9140cd28d37e h1:UAsXPaMVfU3sx0ZvJIw8BfBb01riKEJ7iifmsls7EJs=
 github.com/danielbintar/qwe-server v0.0.0-20190228023600-9140cd28d37e/go.mod h1:W6TRFMBO5hM2FDKA9bRB+bSVdCOXBQUBpslAZtRuweM=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=

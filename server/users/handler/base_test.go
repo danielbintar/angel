@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/danielbintar/angel/server/users"
+	"github.com/danielbintar/angel/server/users/factory"
 	"github.com/danielbintar/angel/server/users/handler"
 
 	"github.com/julienschmidt/httprouter"
@@ -17,13 +17,13 @@ import (
 )
 
 func TestNewHandler(t *testing.T) {
-	m := users.Instance()
+	m := factory.MockBase()
 	h := handler.NewBaseHandler(m)
 	assert.NotNil(t, h)
 }
 
 func TestHealthz(t *testing.T) {
-	m := users.Instance()
+	m := factory.MockBase()
 	h := handler.NewBaseHandler(m)
 
 	req, err := http.NewRequest("GET", "/healthz", nil)
@@ -42,7 +42,7 @@ func TestHealthz(t *testing.T) {
 
 func TestCreateUser(t *testing.T) {
 	t.Run("no body", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		req, err := http.NewRequest("POST", "/users", nil)
@@ -59,7 +59,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("no username", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"password":"123456"}`)
@@ -78,7 +78,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("invalid type username", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":12}`)
@@ -97,7 +97,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("invalid type password", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"password":12}`)
@@ -116,7 +116,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("no password", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456"}`)
@@ -135,7 +135,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("mysql problem", func(t *testing.T) {
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
@@ -155,7 +155,7 @@ func TestCreateUser(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		gotenv.Load("../.env")
-		m := users.Instance()
+		m := factory.MockBase()
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
