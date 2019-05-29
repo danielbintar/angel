@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="android"
-run/main_scene="res://scenes/register.tscn"
+run/main_scene="res://scenes/home.tscn"
 config/icon="res://icon.png"
 
 [autoload]
