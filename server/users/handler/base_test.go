@@ -155,7 +155,7 @@ func TestCreateUser(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		gotenv.Load("../.env")
-		m := factory.MockBase()
+		m := factory.MockBase("find_user_by_username_404")
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)

@@ -37,5 +37,9 @@ func (self DummyDatabase) FindUserByUsername(_ string) (*model.User, error) {
 		return nil, errors.New("broken")
 	}
 
-	return nil, nil
+	if slice.InStrings("find_user_by_username_404", self.Options) {
+		return nil, nil
+	}
+
+	return &model.User{}, nil
 }

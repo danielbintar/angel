@@ -31,7 +31,7 @@ func (self *CreateForm) Perform() (interface{}, *service.Error) {
 		return nil, &service.Error { Error: err.Error(), Private: true }
 	}
 	if user != nil {
-		return user, &service.Error { Error: "username already used" }
+		return nil, &service.Error { Error: "username already used" }
 	}
 
 	user = &model.User{Username: self.Username}
