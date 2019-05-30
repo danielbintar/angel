@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/danielbintar/angel/server/users/db"
+	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/model"
 	"github.com/danielbintar/angel/server/users/service"
 
@@ -13,6 +13,7 @@ import (
 type CreateForm struct {
 	Username string `json:"username" validate:"nonzero"`
 	Password string `json:"password" validate:"nonzero"`
+	Manager  *users.UserManager `    validate:"nonzero"`
 }
 
 func (self *CreateForm) Validate() *service.Error {
@@ -24,22 +25,23 @@ func (self *CreateForm) Validate() *service.Error {
 }
 
 func (self *CreateForm) Perform() (interface{}, *service.Error) {
-	user := &model.User{Username: self.Username}
+	user, err := self.Manager.DatabaseManager.FindUserByUsername(self.Username)
 
-	if err := db.DB().Where(&user).First(&user).Error; err != nil {
-		if err.Error() != "record not found" {
-			return nil, &service.Error { Error: err.Error(), Private: true }
-		}
-	} else {
+	if err != nil {
+		return nil, &service.Error { Error: err.Error(), Private: true }
+	}
+	if user != nil {
 		return user, &service.Error { Error: "username already used" }
 	}
+
+	user = &model.User{Username: self.Username}
 
 	// 0 for using default cost
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(self.Password), 0)
 	user.Username = self.Username
 	user.Password = string(encryptedPassword)
 
-	if err := db.DB().Create(&user).Error; err != nil {
+	if err := self.Manager.DatabaseManager.InsertUser(user); err != nil {
 		return nil, &service.Error { Error: err.Error(), Private: true }
 	}
 

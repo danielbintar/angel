@@ -60,6 +60,7 @@ func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 		return
 	}
 
+	form.Manager = self.m
 	userI, serviceErr := user.Create(form)
 	if serviceErr != nil {
 		WriteServiceError(w, serviceErr)
