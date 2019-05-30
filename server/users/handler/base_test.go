@@ -135,7 +135,7 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("mysql problem", func(t *testing.T) {
-		m := factory.MockBase()
+		m := factory.MockBase("broken_find_user_by_username")
 		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)

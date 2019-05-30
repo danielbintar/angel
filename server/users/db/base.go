@@ -11,7 +11,8 @@ import (
 )
 
 type DatabaseManagerInterface interface {
-	InsertUser(model.User) error
+	FindUserByUsername(string) (*model.User, error)
+	InsertUser(*model.User) error
 }
 
 func NewDB() DatabaseManagerInterface {
@@ -38,6 +39,10 @@ type DatabaseManager struct {
 	DB *sql.DB
 }
 
-func (self *DatabaseManager) InsertUser(user model.User) error {
+func (self *DatabaseManager) FindUserByUsername(username string) (*model.User, error) {
+	return nil, nil
+}
+
+func (self *DatabaseManager) InsertUser(user *model.User) error {
 	return nil
 }

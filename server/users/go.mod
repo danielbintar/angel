@@ -3,6 +3,7 @@ module github.com/danielbintar/angel/server/users
 go 1.12
 
 require (
+	github.com/danielbintar/angel/server-library v0.0.0-20190529145453-576c2ee29bbf
 	github.com/danielbintar/qwe-server v0.0.0-20190228023600-9140cd28d37e
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-chi/render v1.0.1 // indirect

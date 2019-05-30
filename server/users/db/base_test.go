@@ -20,5 +20,13 @@ func TestNewDB(t *testing.T) {
 func TestInsertUser(t *testing.T) {
 	gotenv.Load("../.env")
 	database := db.NewDB()
-	assert.Nil(t, database.InsertUser(model.User{}))
+	assert.Nil(t, database.InsertUser(&model.User{}))
+}
+
+func TestFindUserByUsername(t *testing.T) {
+	gotenv.Load("../.env")
+	database := db.NewDB()
+	u, err := database.FindUserByUsername("asd")
+	assert.Nil(t, u)
+	assert.Nil(t, err)
 }

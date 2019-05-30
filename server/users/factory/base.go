@@ -1,7 +1,6 @@
 package factory
 
 import (
-	"fmt"
 	"errors"
 
 	"github.com/danielbintar/angel/server/users"
@@ -11,22 +10,32 @@ import (
 	"github.com/danielbintar/angel/server-library/slice"
 )
 
-func MockBase() *users.UserManager {
-	database := MockDatabase()
+func MockBase(options ...string) *users.UserManager {
+	database := MockDatabase(options...)
 	m := users.Instance(database)
 	return m
 }
 
 func MockDatabase(options ...string) db.DatabaseManagerInterface {
-	if slice.InStrings("broken_database", options) {
-		fmt.Println("hmmm")
-	}
-
-	return DummyDatabase{}
+	return DummyDatabase{Options: options}
 }
 
-type DummyDatabase struct {}
-func (self DummyDatabase) InsertUser(user model.User) error { return nil }
+type DummyDatabase struct {
+	Options []string
+}
 
-type BrokenDatabase struct {}
-func (self BrokenDatabase) InsertUser(user model.User) error { return errors.New("broken") }
+func (self DummyDatabase) InsertUser(_ *model.User) error {
+	if slice.InStrings("broken_insert_user", self.Options) {
+		return errors.New("broken")
+	}
+
+	return nil
+}
+
+func (self DummyDatabase) FindUserByUsername(_ string) (*model.User, error) {
+	if slice.InStrings("broken_find_user_by_username", self.Options) {
+		return nil, errors.New("broken")
+	}
+
+	return nil, nil
+}
