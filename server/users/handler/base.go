@@ -13,12 +13,12 @@ import (
 )
 
 type baseHandler struct {
-	m *users.UserManager
+	manager *users.UserManager
 }
 
 func NewBaseHandler(m *users.UserManager) *baseHandler {
 	return &baseHandler {
-		m: m,
+		manager: m,
 	}
 }
 
@@ -60,8 +60,36 @@ func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 		return
 	}
 
-	form.Manager = self.m
+	form.Manager = self.manager
 	userI, serviceErr := user.Create(form)
+	if serviceErr != nil {
+		WriteServiceError(w, serviceErr)
+		return
+	}
+
+	byteData, _ := json.Marshal(userI)
+	var user model.User
+	json.Unmarshal(byteData, &user)
+
+	WriteSuccess(w, &user)
+}
+
+func (self *baseHandler) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	var form user.LoginForm
+
+	if r.Body == nil {
+		http.Error(w, "body is required", http.StatusUnprocessableEntity)
+		return
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&form)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
+	form.Manager = self.manager
+	userI, serviceErr := user.Login(form)
 	if serviceErr != nil {
 		WriteServiceError(w, serviceErr)
 		return
