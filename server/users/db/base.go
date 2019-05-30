@@ -42,7 +42,15 @@ type DatabaseManager struct {
 }
 
 func (self *DatabaseManager) FindUserByUsername(username string) (*model.User, error) {
-	return nil, nil
+	record := self.DB.QueryRow("SELECT id, username, password, created_at, updated_at FROM users WHERE username=? LIMIT 1", username)
+
+	var user model.User
+	err := record.Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt, &user.UpdatedAt)
+
+	if err == sql.ErrNoRows { return nil, nil }
+	if err != nil { return nil, err }
+
+	return &user, nil
 }
 
 func (self *DatabaseManager) InsertUser(user *model.User) error {

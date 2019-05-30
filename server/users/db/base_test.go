@@ -27,7 +27,9 @@ func TestInsertUser(t *testing.T) {
 	assert.Equal(t, uint(0), u.ID)
 	assert.Equal(t, time.Time{}, u.CreatedAt)
 	assert.Equal(t, time.Time{}, u.UpdatedAt)
+
 	assert.Nil(t, database.InsertUser(u))
+
 	assert.NotEqual(t, uint(0), u.ID)
 	assert.NotEqual(t, time.Time{}, u.CreatedAt)
 	assert.NotEqual(t, time.Time{}, u.UpdatedAt)
@@ -39,5 +41,11 @@ func TestFindUserByUsername(t *testing.T) {
 	database := db.NewDB()
 	u, err := database.FindUserByUsername("asd")
 	assert.Nil(t, u)
+	assert.Nil(t, err)
+
+	database.InsertUser(&model.User{Username: "lala"})
+
+	u, err = database.FindUserByUsername("lala")
+	assert.NotNil(t, u)
 	assert.Nil(t, err)
 }
