@@ -1,8 +1,10 @@
 package db
 
 import (
-	"os"
+	"errors"
 	"fmt"
+	"os"
+	"time"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -44,5 +46,18 @@ func (self *DatabaseManager) FindUserByUsername(username string) (*model.User, e
 }
 
 func (self *DatabaseManager) InsertUser(user *model.User) error {
+	if user == nil {
+		return errors.New("cant insert nil user")
+	}
+
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = user.CreatedAt
+	row, err := self.DB.Exec("INSERT INTO users(username, password, created_at, updated_at) VALUES(?, ?, ?, ?)", user.Username, user.Password, user.CreatedAt, user.UpdatedAt)
+
+	if err != nil { return err }
+
+	id, _ := row.LastInsertId()
+	user.ID = uint(id)
+
 	return nil
 }
