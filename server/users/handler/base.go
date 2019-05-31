@@ -49,11 +49,6 @@ func (self *baseHandler) Healthz(w http.ResponseWriter, r *http.Request, _ httpr
 func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var form user.CreateForm
 
-	if r.Body == nil {
-		http.Error(w, "body is required", http.StatusUnprocessableEntity)
-		return
-	}
-
 	err := json.NewDecoder(r.Body).Decode(&form)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
@@ -76,11 +71,6 @@ func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 
 func (self *baseHandler) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var form user.LoginForm
-
-	if r.Body == nil {
-		http.Error(w, "body is required", http.StatusUnprocessableEntity)
-		return
-	}
 
 	err := json.NewDecoder(r.Body).Decode(&form)
 	if err != nil {
