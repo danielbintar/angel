@@ -47,16 +47,9 @@ func (self *baseHandler) Healthz(w http.ResponseWriter, r *http.Request, _ httpr
 }
 
 func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	var form user.CreateForm
-
-	err := json.NewDecoder(r.Body).Decode(&form)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
-		return
-	}
-
+	form := r.Context().Value("form").(*user.CreateForm)
 	form.Manager = self.manager
-	userI, serviceErr := user.Create(form)
+	userI, serviceErr := user.Create(*form)
 	if serviceErr != nil {
 		WriteServiceError(w, serviceErr)
 		return
@@ -70,16 +63,9 @@ func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 }
 
 func (self *baseHandler) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	var form user.LoginForm
-
-	err := json.NewDecoder(r.Body).Decode(&form)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
-		return
-	}
-
+	form := r.Context().Value("form").(*user.LoginForm)
 	form.Manager = self.manager
-	userI, serviceErr := user.Login(form)
+	userI, serviceErr := user.Login(*form)
 	if serviceErr != nil {
 		WriteServiceError(w, serviceErr)
 		return
