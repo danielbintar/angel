@@ -9,8 +9,9 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type Adapter func(httprouter.Handle) httprouter.Handle
-
+// use this to use various middleware
+// example
+// router.POST("/users", middleware.Adapt(handler, middleware.MustHaveForm(&form)))
 func Adapt(h httprouter.Handle, adapters ...Adapter) httprouter.Handle {
 	for _, adapter := range adapters {
 		h = adapter(h)
@@ -18,9 +19,19 @@ func Adapt(h httprouter.Handle, adapters ...Adapter) httprouter.Handle {
 	return h
 }
 
+// middleware
+// validate have json body in request
+// body will be unmarshal to context "form"
+// example to access
+// r.Context().Value("form").(*Form)
 func MustHaveForm(form interface{}) Adapter {
 	return func(h httprouter.Handle) httprouter.Handle {
 		return func(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+			if r.Body == nil {
+				http.Error(w, "form must be filled", http.StatusUnprocessableEntity)
+				return
+			}
+
 			err := json.NewDecoder(r.Body).Decode(&form)
 			switch {
 				case err == io.EOF:
@@ -36,3 +47,5 @@ func MustHaveForm(form interface{}) Adapter {
 	    }
     }
 }
+
+type Adapter func(httprouter.Handle) httprouter.Handle
