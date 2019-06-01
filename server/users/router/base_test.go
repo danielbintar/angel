@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/danielbintar/angel/server/users"
+	"github.com/danielbintar/angel/server/users/factory"
 	"github.com/danielbintar/angel/server/users/router"
 
 	"github.com/stretchr/testify/assert"
@@ -23,7 +23,7 @@ func TestNewRouter(t *testing.T) {
 
 func TestPublic(t *testing.T) {
 	r := router.NewRouter()
-	m := users.Instance()
+	m := factory.MockBase()
 	router.Public(r, m)
 	rr := httptest.NewRecorder()
 

@@ -4,10 +4,12 @@ import (
 	"testing"
 
 	"github.com/danielbintar/angel/server/users"
+	"github.com/danielbintar/angel/server/users/factory"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInstance(t *testing.T) {
-	assert.NotNil(t, users.Instance())
+	database := factory.MockDatabase()
+	assert.NotNil(t, users.Instance(database))
 }

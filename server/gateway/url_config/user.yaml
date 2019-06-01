@@ -1,3 +1,4 @@
 prefix: /users
 routes:
   - /
+  - /my-session
