@@ -2,6 +2,9 @@ package factory
 
 import (
 	"errors"
+	"fmt"
+
+	"database/sql"
 
 	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/db"
@@ -22,7 +25,17 @@ func MockDatabase(options ...string) db.DatabaseManagerInterface {
 		return database
 	}
 
+	if slice.InStrings("broken_real_database", options) {
+		database := NewBrokenDB()
+		return database
+	}
+
 	return DummyDatabase{Options: options}
+}
+
+func NewBrokenDB() db.DatabaseManagerInterface {
+	database, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", "", "", "", "", ""))
+	return &db.DatabaseManager { DB: database }
 }
 
 type DummyDatabase struct {
