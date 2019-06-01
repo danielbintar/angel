@@ -3,19 +3,24 @@ package user_test
 import (
 	"testing"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/danielbintar/angel/server/users/factory"
+	"github.com/danielbintar/angel/server/users/model"
 	"github.com/danielbintar/angel/server/users/service/user"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/subosito/gotenv"
 )
 
-type CreateFormValidationCaseTest struct {
-	Form      user.CreateForm
+type LoginFormValidationCaseTest struct {
+	Form      user.LoginForm
 	NilResult bool
 }
 
-func TestCreateFormValidate(t *testing.T) {
-	cases := generateCreateFormValidateTestCase()
+func TestLoginFormValidate(t *testing.T) {
+	cases := generateLoginFormValidateTestCase()
 
 	for _, c := range cases {
 		r := c.Form.Validate()
@@ -27,10 +32,10 @@ func TestCreateFormValidate(t *testing.T) {
 	}
 }
 
-func TestCreateFormPerform(t *testing.T) {
+func TestLoginFormPerform(t *testing.T) {
 	t.Run("fail find user", func(t *testing.T) {
 		manager := factory.MockBase("broken_find_user_by_username")
-		form := user.CreateForm {
+		form := user.LoginForm {
 			Username: "a",
 			Password: "a",
 			Manager: manager,
@@ -40,9 +45,9 @@ func TestCreateFormPerform(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 
-	t.Run("user already exists", func(t *testing.T) {
-		manager := factory.MockBase()
-		form := user.CreateForm {
+	t.Run("user not exists", func(t *testing.T) {
+		manager := factory.MockBase("find_user_by_username_404")
+		form := user.LoginForm {
 			Username: "lala",
 			Password: "a",
 			Manager: manager,
@@ -52,9 +57,9 @@ func TestCreateFormPerform(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 
-	t.Run("fail insert user", func(t *testing.T) {
-		manager := factory.MockBase("find_user_by_username_404", "broken_insert_user")
-		form := user.CreateForm {
+	t.Run("wrong password", func(t *testing.T) {
+		manager := factory.MockBase()
+		form := user.LoginForm {
 			Username: "a",
 			Password: "a",
 			Manager: manager,
@@ -65,66 +70,71 @@ func TestCreateFormPerform(t *testing.T) {
 	})
 
 	t.Run("success", func(t *testing.T) {
-		manager := factory.MockBase("find_user_by_username_404")
-		form := user.CreateForm {
+		gotenv.Load("../../.env")
+		manager := factory.MockBase("real_database")
+		form := user.LoginForm {
 			Username: "a",
 			Password: "a",
 			Manager: manager,
 		}
+
+		pass, _ := bcrypt.GenerateFromPassword([]byte(form.Password), 0)
+		manager.DatabaseManager.InsertUser(&model.User{Username: form.Username, Password: string(pass)})
+
 		u, err := form.Perform()
 		assert.NotNil(t, u)
 		assert.Nil(t, err)
 	})
 }
 
-func generateCreateFormValidateTestCase() []CreateFormValidationCaseTest {
+func generateLoginFormValidateTestCase() []LoginFormValidationCaseTest {
 	manager := factory.MockBase()
-	cases := []CreateFormValidationCaseTest {
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {},
+	cases := []LoginFormValidationCaseTest {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Username: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Manager: manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Username: "a",
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Username: "a",
 				Manager: manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Password: "a",
 				Manager: manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		LoginFormValidationCaseTest {
+			Form: user.LoginForm {
 				Username: "a",
 				Password: "a",
 				Manager: manager,

@@ -6,8 +6,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/danielbintar/angel/server/users/factory"
 	"github.com/danielbintar/angel/server/users/handler"
+	"github.com/danielbintar/angel/server/users/model"
+	"github.com/danielbintar/angel/server/users/router"
 
 	"github.com/julienschmidt/httprouter"
 
@@ -41,26 +45,8 @@ func TestHealthz(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	t.Run("no body", func(t *testing.T) {
-		m := factory.MockBase()
-		h := handler.NewBaseHandler(m)
-
-		req, err := http.NewRequest("POST", "/users", nil)
-		if err != nil { t.Fatal(err) }
-
-		rr := httptest.NewRecorder()
-
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
-
-		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
-	})
-
 	t.Run("no username", func(t *testing.T) {
 		m := factory.MockBase()
-		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
@@ -69,55 +55,15 @@ func TestCreateUser(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
-
-		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
-	})
-
-	t.Run("invalid type username", func(t *testing.T) {
-		m := factory.MockBase()
-		h := handler.NewBaseHandler(m)
-
-		body := []byte(`{"username":12}`)
-		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
-		req.Header.Set("Content-Type", "application/json")
-
-		rr := httptest.NewRecorder()
-
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
-
-		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
-	})
-
-	t.Run("invalid type password", func(t *testing.T) {
-		m := factory.MockBase()
-		h := handler.NewBaseHandler(m)
-
-		body := []byte(`{"password":12}`)
-		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
-		req.Header.Set("Content-Type", "application/json")
-
-		rr := httptest.NewRecorder()
-
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
 
 		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
 	})
 
 	t.Run("no password", func(t *testing.T) {
 		m := factory.MockBase()
-		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
@@ -126,17 +72,15 @@ func TestCreateUser(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
 
 		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
 	})
 
 	t.Run("mysql problem", func(t *testing.T) {
 		m := factory.MockBase("broken_find_user_by_username")
-		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
@@ -145,10 +89,9 @@ func TestCreateUser(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
-
-		router.ServeHTTP(rr, req)
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
 
 		assert.Equal(t, http.StatusServiceUnavailable, rr.Code)
 	})
@@ -156,7 +99,6 @@ func TestCreateUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		gotenv.Load("../.env")
 		m := factory.MockBase("find_user_by_username_404")
-		h := handler.NewBaseHandler(m)
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
@@ -165,10 +107,84 @@ func TestCreateUser(t *testing.T) {
 
 		rr := httptest.NewRecorder()
 
-		router := httprouter.New()
-		router.POST("/users", h.CreateUser)
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
 
-		router.ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusOK, rr.Code)
+	})
+}
+
+func TestLogin(t *testing.T) {
+	t.Run("no username", func(t *testing.T) {
+		m := factory.MockBase()
+
+		body := []byte(`{"password":"123456"}`)
+		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
+	})
+
+	t.Run("no password", func(t *testing.T) {
+		m := factory.MockBase()
+
+		body := []byte(`{"username":"123456"}`)
+		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusUnprocessableEntity, rr.Code)
+	})
+
+	t.Run("mysql problem", func(t *testing.T) {
+		m := factory.MockBase("broken_find_user_by_username")
+
+		body := []byte(`{"username":"123456","password":"123456"}`)
+		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
+
+		assert.Equal(t, http.StatusServiceUnavailable, rr.Code)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		gotenv.Load("../.env")
+		m := factory.MockBase("real_database")
+
+		plainPass := "123456"
+		pass, _ := bcrypt.GenerateFromPassword([]byte(plainPass), 0)
+		m.DatabaseManager.InsertUser(&model.User{Username: "123456", Password: string(pass)})
+
+		body := []byte(`{"username":"123456","password":"123456"}`)
+		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+
+		rr := httptest.NewRecorder()
+
+		r := httprouter.New()
+		router.Public(r, m)
+		r.ServeHTTP(rr, req)
 
 		assert.Equal(t, http.StatusOK, rr.Code)
 	})

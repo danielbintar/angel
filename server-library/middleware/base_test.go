@@ -41,18 +41,6 @@ func TestMustHaveForm(t *testing.T) {
 		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
 
-	t.Run("with body", func(t *testing.T) {
-		router := httprouter.New()
-		router.POST("/success", middleware.Adapt(success, mid))
-		w := httptest.NewRecorder()
-		body := []byte(`{}`)
-		req, err := http.NewRequest("POST", "/success", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
-		req.Header.Set("Content-Type", "application/json")
-		router.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusOK, w.Code)
-	})
-
 	t.Run("with wrong type body", func(t *testing.T) {
 		router := httprouter.New()
 		router.POST("/success", middleware.Adapt(success, mid))
@@ -63,6 +51,19 @@ func TestMustHaveForm(t *testing.T) {
 		req.Header.Set("Content-Type", "application/json")
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
+	})
+
+	t.Run("with body", func(t *testing.T) {
+		router := httprouter.New()
+		router.POST("/success", middleware.Adapt(success, mid))
+		w := httptest.NewRecorder()
+		body := []byte(`{}`)
+		req, err := http.NewRequest("POST", "/success", bytes.NewBuffer(body))
+		if err != nil { t.Fatal(err) }
+		req.Header.Set("Content-Type", "application/json")
+		router.ServeHTTP(w, req)
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.NotNil(t, req.Context().Value("form"))
 	})
 }
 

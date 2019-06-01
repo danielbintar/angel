@@ -17,6 +17,11 @@ func MockBase(options ...string) *users.UserManager {
 }
 
 func MockDatabase(options ...string) db.DatabaseManagerInterface {
+	if slice.InStrings("real_database", options) {
+		database := db.NewDB()
+		return database
+	}
+
 	return DummyDatabase{Options: options}
 }
 
