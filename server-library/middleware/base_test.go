@@ -63,7 +63,6 @@ func TestMustHaveForm(t *testing.T) {
 		req.Header.Set("Content-Type", "application/json")
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.NotNil(t, req.Context().Value("form"))
 	})
 }
 

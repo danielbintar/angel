@@ -2,7 +2,8 @@ package user
 
 import (
 	"github.com/danielbintar/angel/server/users"
-	"github.com/danielbintar/angel/server/users/service"
+
+	"github.com/danielbintar/angel/server-library/service"
 
 	"gopkg.in/validator.v2"
 
