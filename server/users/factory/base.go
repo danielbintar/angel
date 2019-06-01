@@ -2,6 +2,9 @@ package factory
 
 import (
 	"errors"
+	"fmt"
+
+	"database/sql"
 
 	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/db"
@@ -17,7 +20,22 @@ func MockBase(options ...string) *users.UserManager {
 }
 
 func MockDatabase(options ...string) db.DatabaseManagerInterface {
+	if slice.InStrings("real_database", options) {
+		database := db.NewDB()
+		return database
+	}
+
+	if slice.InStrings("broken_real_database", options) {
+		database := NewBrokenDB()
+		return database
+	}
+
 	return DummyDatabase{Options: options}
+}
+
+func NewBrokenDB() db.DatabaseManagerInterface {
+	database, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", "", "", "", "", ""))
+	return &db.DatabaseManager { DB: database }
 }
 
 type DummyDatabase struct {
@@ -37,5 +55,9 @@ func (self DummyDatabase) FindUserByUsername(_ string) (*model.User, error) {
 		return nil, errors.New("broken")
 	}
 
-	return nil, nil
+	if slice.InStrings("find_user_by_username_404", self.Options) {
+		return nil, nil
+	}
+
+	return &model.User{}, nil
 }

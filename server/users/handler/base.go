@@ -13,12 +13,12 @@ import (
 )
 
 type baseHandler struct {
-	m *users.UserManager
+	manager *users.UserManager
 }
 
 func NewBaseHandler(m *users.UserManager) *baseHandler {
 	return &baseHandler {
-		m: m,
+		manager: m,
 	}
 }
 
@@ -47,21 +47,25 @@ func (self *baseHandler) Healthz(w http.ResponseWriter, r *http.Request, _ httpr
 }
 
 func (self *baseHandler) CreateUser(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	var form user.CreateForm
-
-	if r.Body == nil {
-		http.Error(w, "body is required", http.StatusUnprocessableEntity)
+	form := r.Context().Value("form").(*user.CreateForm)
+	form.Manager = self.manager
+	userI, serviceErr := user.Create(*form)
+	if serviceErr != nil {
+		WriteServiceError(w, serviceErr)
 		return
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&form)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
-		return
-	}
+	byteData, _ := json.Marshal(userI)
+	var user model.User
+	json.Unmarshal(byteData, &user)
 
-	form.Manager = self.m
-	userI, serviceErr := user.Create(form)
+	WriteSuccess(w, &user)
+}
+
+func (self *baseHandler) Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	form := r.Context().Value("form").(*user.LoginForm)
+	form.Manager = self.manager
+	userI, serviceErr := user.Login(*form)
 	if serviceErr != nil {
 		WriteServiceError(w, serviceErr)
 		return
