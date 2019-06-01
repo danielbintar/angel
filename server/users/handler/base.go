@@ -6,8 +6,9 @@ import (
 
 	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/model"
-	"github.com/danielbintar/angel/server/users/service"
 	"github.com/danielbintar/angel/server/users/service/user"
+
+	"github.com/danielbintar/angel/server-library/service"
 
 	"github.com/julienschmidt/httprouter"
 )
