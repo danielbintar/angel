@@ -28,12 +28,11 @@ func GenerateChanges(model interface{}) []Change {
 
 		if prevVal == afterVal { continue }
 
-		change := Change {
+		changes = append(changes, Change {
 			Key: k,
 			After: afterVal,
 			Previous: prevVal,
-		}
-		changes = append(changes, change)
+		})
 	}
 
 	return changes
