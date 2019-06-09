@@ -8,6 +8,8 @@ import (
 	"github.com/danielbintar/angel/server/users/db"
 	"github.com/danielbintar/angel/server/users/router"
 
+	"github.com/danielbintar/angel/server-library/pubsub"
+
 	"github.com/subosito/gotenv"
 )
 
@@ -16,7 +18,8 @@ func main() {
 	r := router.NewRouter()
 
 	database := db.NewDB()
-	m := users.Instance(database)
+	publisher := pubsub.NewKafkaProducer()
+	m := users.Instance(database, publisher)
 
 	router.Public(r, m)
 

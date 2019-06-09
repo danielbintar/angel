@@ -22,7 +22,7 @@ func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 
 	encodedPayload, _ := json.Marshal(payload)
 
-	pub.Publish("model-log", string(encodedPayload))
+	pub.Publish(micro + "_model-log", string(encodedPayload))
 }
 
 type RequestPayload struct {

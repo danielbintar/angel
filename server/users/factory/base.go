@@ -11,11 +11,13 @@ import (
 	"github.com/danielbintar/angel/server/users/model"
 
 	"github.com/danielbintar/angel/server-library/slice"
+	libFactory "github.com/danielbintar/angel/server-library/factory"
 )
 
 func MockBase(options ...string) *users.UserManager {
 	database := MockDatabase(options...)
-	m := users.Instance(database)
+	publisher := libFactory.MockAsyncPublisher()
+	m := users.Instance(database, publisher)
 	return m
 }
 

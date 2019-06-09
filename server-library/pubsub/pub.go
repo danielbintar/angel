@@ -33,7 +33,7 @@ func (self *KafkaAsyncProducer) Close() {
 }
 
 func (self *KafkaAsyncProducer) Publish(id string, message string) {
-	id = "angel:" + id
+	id = "angel_" + id
 
 	producerMessage := &sarama.ProducerMessage{
 		Topic:     id,
