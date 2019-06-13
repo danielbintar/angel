@@ -7,12 +7,12 @@ import (
 	"os"
 )
 
-type QueryOpt struct {
+type MySQLQueryOpt struct {
 	Query string
 	Base  bool
 }
 
-func Run(opt *QueryOpt) {
+func RunMySQL(opt *MySQLQueryOpt) {
 	prefix := ""
 	if os.Getenv("ENVIRONMENT") == "test" { prefix += "TEST_" }
 

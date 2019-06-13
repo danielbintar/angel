@@ -10,6 +10,6 @@ func main() {
 	key := "TEST_MYSQL_DATABASE"
 	dbName := os.Getenv(key)
 
-	migration.Run(&migration.QueryOpt { Query: "DROP DATABASE IF EXISTS " + dbName, Base: true })
-	migration.Run(&migration.QueryOpt { Query: "CREATE DATABASE IF NOT EXISTS " + dbName, Base: true })
+	migration.RunMySQL(&migration.MySQLQueryOpt { Query: "DROP DATABASE IF EXISTS " + dbName, Base: true })
+	migration.RunMySQL(&migration.MySQLQueryOpt { Query: "CREATE DATABASE IF NOT EXISTS " + dbName, Base: true })
 }
