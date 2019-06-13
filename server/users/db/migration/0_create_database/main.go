@@ -4,12 +4,9 @@ import (
 	"os"
 
 	"github.com/danielbintar/angel/server-library/migration"
-
-	"github.com/subosito/gotenv"
 )
 
 func main() {
-	gotenv.Load()
 	key := "MYSQL_DATABASE"
 	if os.Getenv("ENVIRONMENT") == "TEST" { key = "TEST_" + key }
 	dbName := os.Getenv(key)

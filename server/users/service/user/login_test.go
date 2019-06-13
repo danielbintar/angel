@@ -10,8 +10,6 @@ import (
 	"github.com/danielbintar/angel/server/users/service/user"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/subosito/gotenv"
 )
 
 type LoginFormValidationCaseTest struct {
@@ -70,7 +68,6 @@ func TestLoginFormPerform(t *testing.T) {
 	})
 
 	t.Run("success", func(t *testing.T) {
-		gotenv.Load("../../.env")
 		manager := factory.MockBase("real_database")
 		form := user.LoginForm {
 			Username: "a",
