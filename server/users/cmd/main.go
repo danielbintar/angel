@@ -13,9 +13,9 @@ func main() {
 	r := router.NewRouter()
 
 	database := db.NewDB()
-	m := users.Instance(database)
+	m := users.UserManager { DatabaseManager: database }
 
-	router.Public(r, m)
+	router.Public(r, &m)
 
 	fmt.Println("listen to 7001")
 	http.ListenAndServe(":7001", r)
