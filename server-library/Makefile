@@ -1,5 +1,5 @@
 include .env
-export
+export $(shell sed 's/=.*//' .env)
 
 test:
 	go run test-script/mysql-migration/main.go

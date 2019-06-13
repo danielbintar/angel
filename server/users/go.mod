@@ -10,7 +10,6 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/julienschmidt/httprouter v1.2.0
 	github.com/stretchr/testify v1.3.0
-	github.com/subosito/gotenv v1.1.1
 	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	gopkg.in/validator.v2 v2.0.0-20180514200540-135c24b11c19
 )

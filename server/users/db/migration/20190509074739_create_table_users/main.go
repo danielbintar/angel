@@ -4,13 +4,9 @@ import (
 	"os"
 
 	"github.com/danielbintar/angel/server-library/migration"
-
-	"github.com/subosito/gotenv"
 )
 
 func main() {
-	gotenv.Load()
-
 	var query string
 	if len(os.Args) == 2 && os.Args[1] == "down" {
 		query = "DROP TABLE IF EXISTS users"

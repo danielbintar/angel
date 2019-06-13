@@ -8,19 +8,14 @@ import (
 	"github.com/danielbintar/angel/server/users/factory"
 	"github.com/danielbintar/angel/server/users/model"
 
-	"github.com/subosito/gotenv"
-
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewDB(t *testing.T) {
-	assert.Panics(t, func() { db.NewDB() })
-	gotenv.Load("../.env")
 	assert.NotPanics(t, func() { db.NewDB() })
 }
 
 func TestInsertUser(t *testing.T) {
-	gotenv.Load("../.env")
 	database := db.NewDB()
 
 	t.Run("nil user", func(t *testing.T) {
@@ -49,7 +44,6 @@ func TestInsertUser(t *testing.T) {
 }
 
 func TestFindUserByUsername(t *testing.T) {
-	gotenv.Load("../.env")
 	database := db.NewDB()
 
 	t.Run("not exists user", func(t *testing.T) {
