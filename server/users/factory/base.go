@@ -15,8 +15,8 @@ import (
 
 func MockBase(options ...string) *users.UserManager {
 	database := MockDatabase(options...)
-	m := users.Instance(database)
-	return m
+	m := users.UserManager { DatabaseManager: database }
+	return &m
 }
 
 func MockDatabase(options ...string) db.DatabaseManagerInterface {
