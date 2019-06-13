@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/danielbintar/angel/server/users/db/migration"
+	"github.com/danielbintar/angel/server-library/migration"
 
 	"github.com/subosito/gotenv"
 )
@@ -26,5 +26,5 @@ func main() {
 		)  ENGINE=INNODB;`
 	}
 
-	migration.Run(&migration.QueryOpt { Query: query })
+	migration.RunMySQL(&migration.MySQLQueryOpt { Query: query })
 }
