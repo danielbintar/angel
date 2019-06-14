@@ -18,7 +18,7 @@ func main() {
 	publisher := pubsub.NewKafkaProducer()
 	m := users.UserManager {
 		DatabaseManager: database,
-		publisher: publisher,
+		Publisher: publisher,
 	}
 
 	router.Public(r, &m)
