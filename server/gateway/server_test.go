@@ -8,8 +8,6 @@ import (
 	"github.com/danielbintar/angel/server/gateway"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/subosito/gotenv"
 )
 
 func TestNewServer(t *testing.T) {
@@ -17,7 +15,6 @@ func TestNewServer(t *testing.T) {
 }
 
 func TestServeHTTP(t *testing.T) {
-	gotenv.Load()
 	s := gateway.NewServer()
 
 	t.Run("not found", func(t *testing.T) {

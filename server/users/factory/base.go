@@ -17,8 +17,11 @@ import (
 func MockBase(options ...string) *users.UserManager {
 	database := MockDatabase(options...)
 	publisher := libFactory.MockAsyncPublisher()
-	m := users.Instance(database, publisher)
-	return m
+	m := users.UserManager {
+		DatabaseManager: database,
+		Publisher: publisher,
+	}
+	return &m
 }
 
 func MockDatabase(options ...string) db.DatabaseManagerInterface {

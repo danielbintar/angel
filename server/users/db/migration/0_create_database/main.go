@@ -3,13 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/danielbintar/angel/server/users/db/migration"
-
-	"github.com/subosito/gotenv"
+	"github.com/danielbintar/angel/server-library/migration"
 )
 
 func main() {
-	gotenv.Load()
 	key := "MYSQL_DATABASE"
 	if os.Getenv("ENVIRONMENT") == "TEST" { key = "TEST_" + key }
 	dbName := os.Getenv(key)
@@ -21,5 +18,5 @@ func main() {
 		query = "CREATE DATABASE IF NOT EXISTS "+ dbName
 	}
 
-	migration.Run(&migration.QueryOpt { Query: query, Base: true })
+	migration.RunMySQL(&migration.MySQLQueryOpt { Query: query, Base: true })
 }

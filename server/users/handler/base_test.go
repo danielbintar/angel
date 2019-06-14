@@ -16,8 +16,6 @@ import (
 	"github.com/julienschmidt/httprouter"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/subosito/gotenv"
 )
 
 func TestNewHandler(t *testing.T) {
@@ -97,7 +95,6 @@ func TestCreateUser(t *testing.T) {
 	})
 
 	t.Run("success", func(t *testing.T) {
-		gotenv.Load("../.env")
 		m := factory.MockBase("find_user_by_username_404")
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
@@ -168,7 +165,6 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("success", func(t *testing.T) {
-		gotenv.Load("../.env")
 		m := factory.MockBase("real_database")
 
 		plainPass := "123456"

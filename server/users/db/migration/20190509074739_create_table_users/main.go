@@ -3,14 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/danielbintar/angel/server/users/db/migration"
-
-	"github.com/subosito/gotenv"
+	"github.com/danielbintar/angel/server-library/migration"
 )
 
 func main() {
-	gotenv.Load()
-
 	var query string
 	if len(os.Args) == 2 && os.Args[1] == "down" {
 		query = "DROP TABLE IF EXISTS users"
@@ -26,5 +22,5 @@ func main() {
 		)  ENGINE=INNODB;`
 	}
 
-	migration.Run(&migration.QueryOpt { Query: query })
+	migration.RunMySQL(&migration.MySQLQueryOpt { Query: query })
 }

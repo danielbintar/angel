@@ -9,12 +9,3 @@ type UserManager struct {
 	DatabaseManager db.DatabaseManagerInterface
 	Publisher       pubsub.AsyncPublisher
 }
-
-func Instance(db db.DatabaseManagerInterface, pb pubsub.AsyncPublisher) *UserManager {
-	m := &UserManager {
-		DatabaseManager: db,
-		Publisher: pb,
-	}
-
-	return m
-}
