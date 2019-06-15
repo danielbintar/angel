@@ -8,8 +8,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Open new MySQL Connection
-// Will panic if not able to connect based on environment configuration
+// open new MySQL connection
+// will panic if not able to connect based on environment configuration
 //  MYSQL_USER
 //  MYSQL_PASSWORD
 //  MYSQL_HOST

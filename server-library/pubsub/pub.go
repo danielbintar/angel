@@ -8,15 +8,15 @@ import (
 	"github.com/Shopify/sarama"
 )
 
+// use this for `it's ok to do this later` operation
 type AsyncPublisher interface {
 	Publish(id string, message string)
 	Close()
 }
 
-type KafkaAsyncProducer struct {
-	producer sarama.AsyncProducer
-}
-
+// open new kafka connection
+// based on environment configurations
+/// KAFKA_BROKERS
 func NewKafkaAsyncProducer() AsyncPublisher {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = false
@@ -28,6 +28,10 @@ func NewKafkaAsyncProducer() AsyncPublisher {
 	kafkaProducer, err := sarama.NewAsyncProducer(brokers, config)
 	if err != nil { panic(err) }
 	return &KafkaAsyncProducer{producer: kafkaProducer}
+}
+
+type KafkaAsyncProducer struct {
+	producer sarama.AsyncProducer
 }
 
 func (self *KafkaAsyncProducer) Close() {

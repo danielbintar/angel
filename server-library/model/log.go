@@ -8,12 +8,23 @@ import (
 	"github.com/danielbintar/angel/server-library/pubsub"
 )
 
+
+// log model changes
+// model must have field PreviousData
+// ex:
+//
+///  type User struct {
+///  	Money int
+///  	PreviousData *User
+///  }
+///  model.Log("user_micro", user, pub)
+// micro name should be snake case
 func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 	changes := GenerateChanges(model)
 
 	if len(changes) == 0 { return }
 
-	payload := RequestPayload {
+	payload := LogRequestPayload {
 		ID: fmt.Sprintf("%v", reflect.ValueOf(model).FieldByName("ID").Interface()),
 		ModelName: reflect.TypeOf(model).Name(),
 		Changes: changes,
@@ -24,18 +35,7 @@ func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 	pub.Publish(micro + "_model-log", string(encodedPayload))
 }
 
-type RequestPayload struct {
-	ID        string   `json:"id"`
-	ModelName string   `json:"model_name"`
-	Changes   []Change `json:"changes"`
-}
-
-type Change struct {
-	Key      string
-	Previous string
-	After    string
-}
-
+// get model changes
 func GenerateChanges(model interface{}) []Change {
 	var changes []Change
 
@@ -61,4 +61,16 @@ func GenerateChanges(model interface{}) []Change {
 	}
 
 	return changes
+}
+
+type Change struct {
+	Key      string
+	Previous string
+	After    string
+}
+
+type LogRequestPayload struct {
+	ID        string   `json:"id"`
+	ModelName string   `json:"model_name"`
+	Changes   []Change `json:"changes"`
 }
