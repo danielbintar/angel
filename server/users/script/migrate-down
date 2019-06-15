@@ -9,7 +9,7 @@ BASE="${DIR:0:-7}"
 for packages in $BASE/db/migration/*; do
 	for pfullpath in $packages/*; do
 		for fullpath in $pfullpath/*; do
-			if [[ $pfullpath == *create_database* ]]; then
+			if [[ $pfullpath == *create_database* || $pfullpath == *create_topic* ]]; then
 				echo "Running ${pfullpath}"
 				go run $fullpath down
 			fi
