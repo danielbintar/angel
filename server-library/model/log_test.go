@@ -30,13 +30,13 @@ func TestLog(t *testing.T) {
 		copyiedData := dummy
 		dummy.PreviousData = &copyiedData
 		publisher := factory.MockAsyncPublisher()
-		assert.NotPanics(t, func() { model.Log("users", dummy, &publisher) })
+		assert.NotPanics(t, func() { model.Log("users", dummy, publisher) })
 		assert.Equal(t, uint(0), publisher.PublishCallCount)
 	})
 
 	t.Run("success", func(t *testing.T) {
 		publisher := factory.MockAsyncPublisher()
-		assert.NotPanics(t, func() { model.Log("users", dummy, &publisher) })
+		assert.NotPanics(t, func() { model.Log("users", dummy, publisher) })
 		assert.Equal(t, uint(1), publisher.PublishCallCount)
 	})
 }
