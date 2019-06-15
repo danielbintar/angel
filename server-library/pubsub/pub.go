@@ -17,12 +17,14 @@ type KafkaAsyncProducer struct {
 	producer sarama.AsyncProducer
 }
 
-func NewKafkaProducer() AsyncPublisher {
+func NewKafkaAsyncProducer() AsyncPublisher {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = false
 	config.Producer.Return.Errors = false
 
-	brokers := strings.Split(os.Getenv("KAFKA_BROKERS"), ",")
+	prefix := ""
+	if os.Getenv("ENVIRONMENT") == "test" { prefix = "TEST_" }
+	brokers := strings.Split(os.Getenv(prefix + "KAFKA_BROKERS"), ",")
 	kafkaProducer, err := sarama.NewAsyncProducer(brokers, config)
 	if err != nil { panic(err) }
 	return &KafkaAsyncProducer{producer: kafkaProducer}

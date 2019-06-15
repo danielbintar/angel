@@ -15,7 +15,7 @@ func main() {
 	r := router.NewRouter()
 
 	database := db.NewDB()
-	publisher := pubsub.NewKafkaProducer()
+	publisher := pubsub.NewKafkaAsyncProducer()
 	m := users.UserManager {
 		DatabaseManager: database,
 		Publisher: publisher,
