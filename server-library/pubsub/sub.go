@@ -5,12 +5,15 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 
 	"github.com/Shopify/sarama"
 )
 
-func Subscribe(topic string, handle func(message []byte)) {
+func Subscribe(topics []string, handle func(message []byte)) {
+	if len(topics) == 0 { panic("no topic to subscribed") }
+
 	config := sarama.NewConfig()
 	config.Version = sarama.V2_2_0_0
 	config.Consumer.Offsets.Initial = sarama.OffsetOldest
@@ -18,26 +21,43 @@ func Subscribe(topic string, handle func(message []byte)) {
 	consumer := Consumer{ handle: handle }
 
 	ctx := context.Background()
-	client, err := sarama.NewConsumerGroup([]string{"localhost:9092"}, "angel_users_model-log", config)
+	prefix := ""
+	if os.Getenv("ENVIRONMENT") == "test" { prefix = "TEST_" }
+	brokerAddrs := strings.Split(os.Getenv(prefix + "KAFKA_BROKERS"), ",")
+	client, err := sarama.NewConsumerGroup(brokerAddrs, topics[0], config)
 	if err != nil { panic(err) }
 
 	consumer.ready = make(chan bool, 0)
 
 	go func() {
 		for {
-			err := client.Consume(ctx, []string{topic}, &consumer)
+			err := client.Consume(ctx, realTopics(topics), &consumer)
 			if err != nil { panic(err) }
 		}
 	}()
 
 	<-consumer.ready
 
-	fmt.Println("Consuming " + topic)
+	fmt.Println("Consuming " + strings.Join(topics, ", "))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 
 	<-sigterm
+}
+
+func realTopics(topics []string) []string {
+	var r []string
+	for _, topic := range topics {
+		r = append(r, realTopic(topic))
+	}
+	return r
+}
+
+func realTopic(topic string) string {
+	prefix := ""
+	if os.Getenv("ENVIRONMENT") == "test" { prefix = "TEST_" }
+	return prefix + "angel_" + topic
 }
 
 type Consumer struct {

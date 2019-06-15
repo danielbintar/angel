@@ -5,9 +5,7 @@ import (
 )
 
 func main() {
-	pubsub.Subscribe("angel_users_model-log", handle)
-}
+	pubsub.Subscribe([]string{"angel_users_model-log"}, func(message []byte) {
 
-func handle(message []byte) {
-
+	})
 }
