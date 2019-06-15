@@ -7,6 +7,9 @@ import (
 	"github.com/Shopify/sarama"
 )
 
+// create kafka topic, will panic if already created
+// ex: migration.CreateKafkaTopic("increase-sold-count", 3, 1)
+// topic name should be hyphen case (-)
 func CreateKafkaTopic(topic string, numPartition int32, replicationFactor int16) {
 	handleClusterAdminKafka(func (admin sarama.ClusterAdmin) {
 		err := admin.CreateTopic(realTopic(topic), &sarama.TopicDetail{
@@ -17,6 +20,8 @@ func CreateKafkaTopic(topic string, numPartition int32, replicationFactor int16)
 	})
 }
 
+// delete kafka topic, will do nothing if not exists
+// ex: migration.DeleteKafkaTopic("increase-sold-count")
 func DeleteKafkaTopic(topic string) {
 	handleClusterAdminKafka(func (admin sarama.ClusterAdmin) {
 		err := admin.DeleteTopic(realTopic(topic))
