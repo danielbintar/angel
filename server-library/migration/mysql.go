@@ -7,11 +7,26 @@ import (
 	"os"
 )
 
+// parameter to run mysql query
+// 1. Query
+//  The Query
+//  ex: `DROP DATABASE IF EXISTS databaseName`
+// 2. Base
+//  Default is false
+//  if false, it will run database level query
+//  database will be selected from environment configuration
+//    MYSQL_DATABASE
 type MySQLQueryOpt struct {
 	Query string
 	Base  bool
 }
 
+// Run MySQL Query based on environment configuration
+// MYSQL_USER
+// MYSQL_PASSWORD
+// MYSQL_HOST
+// MYSQL_PORT
+// MYSQL_DATABASE
 func RunMySQL(opt *MySQLQueryOpt) {
 	prefix := ""
 	if os.Getenv("ENVIRONMENT") == "test" { prefix += "TEST_" }

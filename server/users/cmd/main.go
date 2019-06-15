@@ -7,13 +7,19 @@ import (
 	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/db"
 	"github.com/danielbintar/angel/server/users/router"
+
+	"github.com/danielbintar/angel/server-library/pubsub"
 )
 
 func main() {
 	r := router.NewRouter()
 
 	database := db.NewDB()
-	m := users.UserManager { DatabaseManager: database }
+	publisher := pubsub.NewKafkaAsyncProducer()
+	m := users.UserManager {
+		DatabaseManager: database,
+		Publisher: publisher,
+	}
 
 	router.Public(r, &m)
 

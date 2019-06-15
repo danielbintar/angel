@@ -5,6 +5,7 @@ import (
 	"github.com/danielbintar/angel/server/users/model"
 
 	"github.com/danielbintar/angel/server-library/service"
+	modelLib "github.com/danielbintar/angel/server-library/model"
 
 	"gopkg.in/validator.v2"
 
@@ -36,6 +37,7 @@ func (self *CreateForm) Perform() (interface{}, *service.Error) {
 	}
 
 	user = &model.User{Username: self.Username}
+	user.PreviousData = &model.User{}
 
 	// 0 for using default cost
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(self.Password), 0)
@@ -46,5 +48,6 @@ func (self *CreateForm) Perform() (interface{}, *service.Error) {
 		return nil, &service.Error { Error: err.Error(), Private: true }
 	}
 
+	modelLib.Log("users", *user, self.Manager.Publisher)
 	return user, nil
 }

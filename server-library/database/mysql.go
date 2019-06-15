@@ -8,6 +8,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// open new MySQL connection
+// will panic if not able to connect based on environment configuration
+//  MYSQL_USER
+//  MYSQL_PASSWORD
+//  MYSQL_HOST
+//  MYSQL_PORT
+//  MYSQL_DATABASE
 func NewMySQL() *sql.DB {
 	prefix := ""
 	if os.Getenv("ENVIRONMENT") == "test" { prefix += "TEST_" }

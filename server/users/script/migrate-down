@@ -6,8 +6,16 @@ START_DATE="$(date +%s)"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # TODO: LEARN WTF IS GOING ON HERE
 BASE="${DIR:0:-7}"
 
-echo "Running 0_create_database"
-go run $BASE/db/migration/0_create_database/main.go down
+for packages in $BASE/db/migration/*; do
+	for pfullpath in $packages/*; do
+		for fullpath in $pfullpath/*; do
+			if [[ $pfullpath == *create_database* || $pfullpath == *create_topic* ]]; then
+				echo "Running ${pfullpath}"
+				go run $fullpath down
+			fi
+		done
+	done
+done
 
 END_DATE="$(date +%s)"
 DIFF="$(($END_DATE-$START_DATE))"
