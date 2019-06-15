@@ -1,7 +1,7 @@
 package factory
 
-func MockAsyncPublisher(options ...string) DummyAsyncPublisher {
-	return DummyAsyncPublisher{}
+func MockAsyncPublisher(options ...string) *DummyAsyncPublisher {
+	return &DummyAsyncPublisher{}
 }
 
 type DummyAsyncPublisher struct {

@@ -6,8 +6,16 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # TODO: 
 BASE="${DIR:0:-7}"
 echo "Start up migrating"
 
-echo "Running 0_create_database"
-ENVIRONMENT=test go run $BASE/db/migration/mysql/0_create_database/main.go down
+for packages in $BASE/db/migration/*; do
+	for pfullpath in $packages/*; do
+		for fullpath in $pfullpath/*; do
+			if [[ $pfullpath == *create_database* || $pfullpath == *create_topic* ]]; then
+				echo "Running ${pfullpath}"
+				ENVIRONMENT=test go run $fullpath down
+			fi
+		done
+	done
+done
 
 for packages in $BASE/db/migration/*; do
 	for pfullpath in $packages/*; do
