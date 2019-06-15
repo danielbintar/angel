@@ -16,7 +16,6 @@ func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 	payload := RequestPayload {
 		ID: fmt.Sprintf("%v", reflect.ValueOf(model).FieldByName("ID").Interface()),
 		ModelName: reflect.TypeOf(model).Name(),
-		MicroName: micro,
 		Changes: changes,
 	}
 
@@ -28,7 +27,6 @@ func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 type RequestPayload struct {
 	ID        string   `json:"id"`
 	ModelName string   `json:"model_name"`
-	MicroName string   `json:"micro_name"`
 	Changes   []Change `json:"changes"`
 }
 
