@@ -27,7 +27,6 @@ services:
       - 9092:9092
     hostname: kafka
     environment:
-      KAFKA_CREATE_TOPICS: "angel_users_model-log:1:1"
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
