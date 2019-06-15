@@ -6,14 +6,12 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # TODO: 
 BASE="${DIR:0:-7}"
 echo "Start up migrating"
 
-for pfullpath in $BASE/db/migration/*; do
-	if [[ $pfullpath == *base.go ]]; then
-		continue
-	fi
-
-	for fullpath in $pfullpath/*; do
-		echo "Running ${pfullpath##*/}"
-		go run $fullpath
+for packages in $BASE/db/migration/*; do
+	for pfullpath in $packages/*; do
+		for fullpath in $pfullpath/*; do
+			echo "Running ${pfullpath}"
+			go run $fullpath
+		done
 	done
 done
 

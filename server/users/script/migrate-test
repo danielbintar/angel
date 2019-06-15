@@ -7,16 +7,14 @@ BASE="${DIR:0:-7}"
 echo "Start up migrating"
 
 echo "Running 0_create_database"
-ENVIRONMENT=test go run $BASE/db/migration/0_create_database/main.go down
+ENVIRONMENT=test go run $BASE/db/migration/mysql/0_create_database/main.go down
 
-for pfullpath in $BASE/db/migration/*; do
-	if [[ $pfullpath == *base.go ]]; then
-		continue
-	fi
-
-	for fullpath in $pfullpath/*; do
-		echo "Running ${pfullpath##*/}"
-		ENVIRONMENT=test go run $fullpath
+for packages in $BASE/db/migration/*; do
+	for pfullpath in $packages/*; do
+		for fullpath in $pfullpath/*; do
+			echo "Running ${pfullpath##*/}"
+			ENVIRONMENT=test go run $fullpath
+		done
 	done
 done
 
