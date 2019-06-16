@@ -4,10 +4,6 @@ import (
 	"encoding/json"
 	"testing"
 
-	// "golang.org/x/crypto/bcrypt"
-
-	// "github.com/danielbintar/angel/server/users/factory"
-	// "github.com/danielbintar/angel/server/users/model"
 	"github.com/danielbintar/angel/server/consumer-kafka/model"
 	"github.com/danielbintar/angel/server/consumer-kafka/service"
 
@@ -54,7 +50,7 @@ func TestLoadConfigFormPerform(t *testing.T) {
 	t.Run("config exists", func(t *testing.T) {
 		form := service.LoadConfigForm {
 			MicroName: "dummy-micro",
-			ConsumerName: "success-consumer",
+			ConsumerName: "valid-consumer",
 		}
 
 		assert.NotPanics(t, func() { form.Perform() })
