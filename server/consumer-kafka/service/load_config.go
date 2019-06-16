@@ -1,9 +1,14 @@
 package service
 
 import (
+	"io/ioutil"
+
+	"github.com/danielbintar/angel/server/consumer-kafka/model"
 	serviceLib "github.com/danielbintar/angel/server-library/service"
 
 	"gopkg.in/validator.v2"
+
+	"gopkg.in/yaml.v2"
 )
 
 type LoadConfigForm struct {
@@ -17,4 +22,15 @@ func (self *LoadConfigForm) Validate() *serviceLib.Error {
 	}
 
 	return nil
+}
+
+func (self *LoadConfigForm) Perform() (interface{}, *serviceLib.Error) {
+	yamlFile, err := ioutil.ReadFile("../consumers/" + self.MicroName + "/" + self.ConsumerName + "/config.yaml")
+	if err != nil { panic(self.ConsumerName + " not found in " + self.MicroName) }
+
+	var config model.Config
+	err = yaml.Unmarshal(yamlFile, &config)
+	if err != nil { panic("wrong configuration file on " + self.ConsumerName + " in " + self.MicroName) }
+
+	return config, nil
 }
