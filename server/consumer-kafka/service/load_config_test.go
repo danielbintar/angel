@@ -68,11 +68,11 @@ func TestLoadConfigFormPerform(t *testing.T) {
 		json.Unmarshal(byteData, &config)
 
 		assert.Equal(t, 2, len(config.Topics))
-		if config.Topics[0] == "users-model-log" {
-			assert.Equal(t, "items-model-log", config.Topics[1])
+		if config.Topics[0] == "users_model-log" {
+			assert.Equal(t, "items_model-log", config.Topics[1])
 		} else {
-			assert.Equal(t, "items-model-log", config.Topics[0])
-			assert.Equal(t, "users-model-log", config.Topics[1])
+			assert.Equal(t, "items_model-log", config.Topics[0])
+			assert.Equal(t, "users_model-log", config.Topics[1])
 		}
 	})
 }
