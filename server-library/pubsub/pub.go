@@ -11,7 +11,7 @@ import (
 // use this for `it's ok to do this later` operation
 type AsyncPublisher interface {
 	Publish(id string, message string)
-	Close()
+	Close() error
 }
 
 // open new kafka connection
@@ -34,8 +34,8 @@ type KafkaAsyncProducer struct {
 	producer sarama.AsyncProducer
 }
 
-func (self *KafkaAsyncProducer) Close() {
-	self.producer.AsyncClose()
+func (self *KafkaAsyncProducer) Close() error {
+	return self.producer.Close()
 }
 
 func (self *KafkaAsyncProducer) Publish(id string, message string) {

@@ -47,6 +47,10 @@ type DummyDatabase struct {
 	Options []string
 }
 
+func (self DummyDatabase) Close() error {
+	return nil
+}
+
 func (self DummyDatabase) InsertUser(_ *model.User) error {
 	if slice.InStrings("broken_insert_user", self.Options) {
 		return errors.New("broken")

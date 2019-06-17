@@ -15,6 +15,16 @@ func TestNewDB(t *testing.T) {
 	assert.NotPanics(t, func() { db.NewDB() })
 }
 
+func TestClose(t *testing.T) {
+	database := db.NewDB()
+	_, err := database.FindUserByUsername("lala")
+	assert.Nil(t, err)
+
+	database.Close()
+	_, err = database.FindUserByUsername("lala")
+	assert.NotNil(t, err)
+}
+
 func TestInsertUser(t *testing.T) {
 	database := db.NewDB()
 
@@ -37,9 +47,9 @@ func TestInsertUser(t *testing.T) {
 	})
 
 	t.Run("broken database", func(t *testing.T) {
-		m := factory.MockBase("broken_real_database")
-		u := &model.User{}
-		assert.NotNil(t, m.DatabaseManager.InsertUser(u))
+		database := factory.MockDatabase("broken_real_database")
+		 u := model.User{}
+		assert.NotNil(t, database.InsertUser(&u))
 	})
 }
 
@@ -61,9 +71,9 @@ func TestFindUserByUsername(t *testing.T) {
 	})
 
 	t.Run("broken database", func(t *testing.T) {
-		m := factory.MockBase("broken_real_database")
+		mockDatabase := factory.MockDatabase("broken_real_database")
 		database.InsertUser(&model.User{Username: "lala"})
-		u, err := m.DatabaseManager.FindUserByUsername("asd")
+		u, err := mockDatabase.FindUserByUsername("asd")
 		assert.Nil(t, u)
 		assert.NotNil(t, err)
 	})
