@@ -11,7 +11,7 @@ import (
 func main() {
 	s := gateway.NewServer()
 
-	h := &http.Server {
+	h := &http.Server{
 		Addr:         ":8089",
 		Handler:      s,
 		ReadTimeout:  310 * time.Second,
