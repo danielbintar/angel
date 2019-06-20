@@ -8,7 +8,6 @@ import (
 	"github.com/danielbintar/angel/server-library/pubsub"
 )
 
-
 // log model changes
 // model must have field PreviousData
 // ex:
@@ -22,17 +21,19 @@ import (
 func Log(micro string, model interface{}, pub pubsub.AsyncPublisher) {
 	changes := GenerateChanges(model)
 
-	if len(changes) == 0 { return }
+	if len(changes) == 0 {
+		return
+	}
 
-	payload := LogRequestPayload {
-		ID: fmt.Sprintf("%v", reflect.ValueOf(model).FieldByName("ID").Interface()),
+	payload := LogRequestPayload{
+		ID:        fmt.Sprintf("%v", reflect.ValueOf(model).FieldByName("ID").Interface()),
 		ModelName: reflect.TypeOf(model).Name(),
-		Changes: changes,
+		Changes:   changes,
 	}
 
 	encodedPayload, _ := json.Marshal(payload)
 
-	pub.Publish(micro + "_model-log", string(encodedPayload))
+	pub.Publish(micro+"_model-log", string(encodedPayload))
 }
 
 // get model changes
@@ -46,16 +47,20 @@ func GenerateChanges(model interface{}) []Change {
 
 	for i := 0; i < v.NumField(); i++ {
 		k := t.Field(i).Name
-		if k == "PreviousData" || k == "ID" { continue }
+		if k == "PreviousData" || k == "ID" {
+			continue
+		}
 
 		prevVal := fmt.Sprintf("%v", prev.Field(i).Interface())
 		afterVal := fmt.Sprintf("%v", v.Field(i).Interface())
 
-		if prevVal == afterVal { continue }
+		if prevVal == afterVal {
+			continue
+		}
 
-		changes = append(changes, Change {
-			Key: k,
-			After: afterVal,
+		changes = append(changes, Change{
+			Key:      k,
+			After:    afterVal,
 			Previous: prevVal,
 		})
 	}

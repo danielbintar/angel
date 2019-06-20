@@ -8,7 +8,7 @@ type Service interface {
 }
 
 // Private for error privacy
-// ex if there is database error and 
+// ex if there is database error and
 // the application doesn't need to tell the end user about it
 // default is false
 type Error struct {

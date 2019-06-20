@@ -31,7 +31,7 @@ type ServiceForm struct {
 
 func (self *ServiceForm) Validate() *service.Error {
 	if slice.InStrings("error_validate", self.Options) {
-		return &service.Error { Error: "error" }
+		return &service.Error{Error: "error"}
 	}
 
 	return nil

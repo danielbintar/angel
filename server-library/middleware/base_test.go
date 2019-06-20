@@ -25,7 +25,9 @@ func TestMustHaveForm(t *testing.T) {
 		router.POST("/success", middleware.Adapt(success, mid))
 		w := httptest.NewRecorder()
 		req, err := http.NewRequest("POST", "/success", nil)
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
@@ -36,7 +38,9 @@ func TestMustHaveForm(t *testing.T) {
 		w := httptest.NewRecorder()
 		body := []byte(``)
 		req, err := http.NewRequest("POST", "/success", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
 	})
@@ -47,7 +51,9 @@ func TestMustHaveForm(t *testing.T) {
 		w := httptest.NewRecorder()
 		body := []byte(`{"name":123}`)
 		req, err := http.NewRequest("POST", "/success", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusUnprocessableEntity, w.Code)
@@ -59,7 +65,9 @@ func TestMustHaveForm(t *testing.T) {
 		w := httptest.NewRecorder()
 		body := []byte(`{}`)
 		req, err := http.NewRequest("POST", "/success", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 		router.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusOK, w.Code)
