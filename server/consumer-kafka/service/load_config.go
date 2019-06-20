@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+	"os"
 	"io/ioutil"
 
 	"github.com/danielbintar/angel/server/consumer-kafka/model"
@@ -25,7 +27,8 @@ func (self *LoadConfigForm) Validate() *serviceLib.Error {
 }
 
 func (self *LoadConfigForm) Perform() (interface{}, *serviceLib.Error) {
-	yamlFile, err := ioutil.ReadFile("../consumers/" + self.MicroName + "/" + self.ConsumerName + "/config.yaml")
+	fmt.Println(os.Getwd())
+	yamlFile, err := ioutil.ReadFile("consumers/" + self.MicroName + "/" + self.ConsumerName + "/config.yaml")
 	if err != nil { panic(self.ConsumerName + " not found in " + self.MicroName) }
 
 	var config model.Config
