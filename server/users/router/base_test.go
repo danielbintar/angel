@@ -28,12 +28,14 @@ func TestPublic(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	tests := []route{
-		{ "GET", "/healthz", http.StatusOK },
+		{"GET", "/healthz", http.StatusOK},
 	}
 
 	for _, test := range tests {
 		req, err := http.NewRequest(test.method, test.uri, nil)
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		r.ServeHTTP(rr, req)
 		assert.Equal(t, test.code, rr.Code)

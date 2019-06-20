@@ -18,7 +18,7 @@ type baseHandler struct {
 }
 
 func NewBaseHandler(m *users.UserManager) *baseHandler {
-	return &baseHandler {
+	return &baseHandler{
 		manager: m,
 	}
 }
@@ -28,7 +28,7 @@ type Response struct {
 }
 
 func WriteSuccess(w http.ResponseWriter, data interface{}) {
-	resp := Response { Data: data }
+	resp := Response{Data: data}
 	encoded, _ := json.Marshal(&resp)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(encoded))

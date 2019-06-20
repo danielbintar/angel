@@ -1,9 +1,9 @@
 package migration
 
 import (
-	_ "github.com/lib/pq"
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"os"
 )
 
@@ -29,7 +29,9 @@ type PostgresQueryOpt struct {
 // POSTGRES_DATABASE
 func RunPostgres(opt *PostgresQueryOpt) {
 	prefix := ""
-	if os.Getenv("ENVIRONMENT") == "test" { prefix += "TEST_" }
+	if os.Getenv("ENVIRONMENT") == "test" {
+		prefix += "TEST_"
+	}
 
 	username := os.Getenv(prefix + "POSTGRES_USER")
 	password := os.Getenv(prefix + "POSTGRES_PASSWORD")
@@ -44,9 +46,13 @@ func RunPostgres(opt *PostgresQueryOpt) {
 
 	db, _ := sql.Open("postgres", url)
 	err := db.Ping()
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	defer db.Close()
 
 	_, err = db.Exec(opt.Query)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 }

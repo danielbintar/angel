@@ -11,10 +11,10 @@ import (
 
 func TestCreate(t *testing.T) {
 	manager := factory.MockBase("broken_find_user_by_username")
-	form := user.CreateForm {
+	form := user.CreateForm{
 		Username: "a",
 		Password: "a",
-		Manager: manager,
+		Manager:  manager,
 	}
 
 	u, err := user.Create(form)
@@ -24,10 +24,10 @@ func TestCreate(t *testing.T) {
 
 func TestLogin(t *testing.T) {
 	manager := factory.MockBase("broken_find_user_by_username")
-	form := user.LoginForm {
+	form := user.LoginForm{
 		Username: "a",
 		Password: "a",
-		Manager: manager,
+		Manager:  manager,
 	}
 
 	u, err := user.Login(form)

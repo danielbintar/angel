@@ -48,7 +48,7 @@ func TestInsertUser(t *testing.T) {
 
 	t.Run("broken database", func(t *testing.T) {
 		database := factory.MockDatabase("broken_real_database")
-		 u := model.User{}
+		u := model.User{}
 		assert.NotNil(t, database.InsertUser(&u))
 	})
 }

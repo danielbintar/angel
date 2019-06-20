@@ -23,10 +23,14 @@ func NewKafkaAsyncProducer() AsyncPublisher {
 	config.Producer.Return.Errors = false
 
 	prefix := ""
-	if os.Getenv("ENVIRONMENT") == "test" { prefix = "TEST_" }
-	brokers := strings.Split(os.Getenv(prefix + "KAFKA_BROKERS"), ",")
+	if os.Getenv("ENVIRONMENT") == "test" {
+		prefix = "TEST_"
+	}
+	brokers := strings.Split(os.Getenv(prefix+"KAFKA_BROKERS"), ",")
 	kafkaProducer, err := sarama.NewAsyncProducer(brokers, config)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	return &KafkaAsyncProducer{producer: kafkaProducer}
 }
 

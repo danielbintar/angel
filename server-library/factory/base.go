@@ -17,4 +17,3 @@ func (self *DummyAsyncPublisher) Publish(_ string, _ string) {
 func (self *DummyAsyncPublisher) Close() error {
 	return nil
 }
-

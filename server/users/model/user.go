@@ -15,11 +15,13 @@ type User struct {
 }
 
 func (u *User) Serialize() *UserSerializer {
-	if u == nil { return nil }
+	if u == nil {
+		return nil
+	}
 
-	return &UserSerializer {
-		ID: u.ID,
-		Username: u.Username,
+	return &UserSerializer{
+		ID:        u.ID,
+		Username:  u.Username,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	}

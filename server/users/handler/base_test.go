@@ -29,7 +29,9 @@ func TestHealthz(t *testing.T) {
 	h := handler.NewBaseHandler(m)
 
 	req, err := http.NewRequest("GET", "/healthz", nil)
-	if err != nil { t.Fatal(err) }
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	rr := httptest.NewRecorder()
 
@@ -48,7 +50,9 @@ func TestCreateUser(t *testing.T) {
 
 		body := []byte(`{"password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -65,7 +69,9 @@ func TestCreateUser(t *testing.T) {
 
 		body := []byte(`{"username":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -82,7 +88,9 @@ func TestCreateUser(t *testing.T) {
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -99,7 +107,9 @@ func TestCreateUser(t *testing.T) {
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -118,7 +128,9 @@ func TestLogin(t *testing.T) {
 
 		body := []byte(`{"password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -135,7 +147,9 @@ func TestLogin(t *testing.T) {
 
 		body := []byte(`{"username":"123456"}`)
 		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -152,7 +166,9 @@ func TestLogin(t *testing.T) {
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
@@ -173,7 +189,9 @@ func TestLogin(t *testing.T) {
 
 		body := []byte(`{"username":"123456","password":"123456"}`)
 		req, err := http.NewRequest("POST", "/users/my-session", bytes.NewBuffer(body))
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 		req.Header.Set("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()

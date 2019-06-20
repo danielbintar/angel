@@ -33,10 +33,10 @@ func TestLoginFormValidate(t *testing.T) {
 func TestLoginFormPerform(t *testing.T) {
 	t.Run("fail find user", func(t *testing.T) {
 		manager := factory.MockBase("broken_find_user_by_username")
-		form := user.LoginForm {
+		form := user.LoginForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -45,10 +45,10 @@ func TestLoginFormPerform(t *testing.T) {
 
 	t.Run("user not exists", func(t *testing.T) {
 		manager := factory.MockBase("find_user_by_username_404")
-		form := user.LoginForm {
+		form := user.LoginForm{
 			Username: "lala",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -57,10 +57,10 @@ func TestLoginFormPerform(t *testing.T) {
 
 	t.Run("wrong password", func(t *testing.T) {
 		manager := factory.MockBase()
-		form := user.LoginForm {
+		form := user.LoginForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -69,10 +69,10 @@ func TestLoginFormPerform(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		manager := factory.MockBase("real_database")
-		form := user.LoginForm {
+		form := user.LoginForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 
 		pass, _ := bcrypt.GenerateFromPassword([]byte(form.Password), 0)
@@ -86,55 +86,55 @@ func TestLoginFormPerform(t *testing.T) {
 
 func generateLoginFormValidateTestCase() []LoginFormValidationCaseTest {
 	manager := factory.MockBase()
-	cases := []LoginFormValidationCaseTest {
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {},
+	cases := []LoginFormValidationCaseTest{
+		{
+			Form:      user.LoginForm{},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Username: "a",
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Manager: manager,
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Username: "a",
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Username: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Password: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: false,
 		},
-		LoginFormValidationCaseTest {
-			Form: user.LoginForm {
+		{
+			Form: user.LoginForm{
 				Username: "a",
 				Password: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: true,
 		},

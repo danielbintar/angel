@@ -41,9 +41,9 @@ func main() {
 		}
 	}()
 
-	m := users.UserManager {
+	m := users.UserManager{
 		DatabaseManager: database,
-		Publisher: publisher,
+		Publisher:       publisher,
 	}
 
 	router.Public(r, &m)
@@ -68,7 +68,7 @@ func main() {
 	<-done
 	log.Print("Server Stopped")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 16 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 16*time.Second)
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
