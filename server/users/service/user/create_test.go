@@ -30,10 +30,10 @@ func TestCreateFormValidate(t *testing.T) {
 func TestCreateFormPerform(t *testing.T) {
 	t.Run("fail find user", func(t *testing.T) {
 		manager := factory.MockBase("broken_find_user_by_username")
-		form := user.CreateForm {
+		form := user.CreateForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -42,10 +42,10 @@ func TestCreateFormPerform(t *testing.T) {
 
 	t.Run("user already exists", func(t *testing.T) {
 		manager := factory.MockBase()
-		form := user.CreateForm {
+		form := user.CreateForm{
 			Username: "lala",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -54,10 +54,10 @@ func TestCreateFormPerform(t *testing.T) {
 
 	t.Run("fail insert user", func(t *testing.T) {
 		manager := factory.MockBase("find_user_by_username_404", "broken_insert_user")
-		form := user.CreateForm {
+		form := user.CreateForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.Nil(t, u)
@@ -66,10 +66,10 @@ func TestCreateFormPerform(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		manager := factory.MockBase("find_user_by_username_404")
-		form := user.CreateForm {
+		form := user.CreateForm{
 			Username: "a",
 			Password: "a",
-			Manager: manager,
+			Manager:  manager,
 		}
 		u, err := form.Perform()
 		assert.NotNil(t, u)
@@ -79,55 +79,55 @@ func TestCreateFormPerform(t *testing.T) {
 
 func generateCreateFormValidateTestCase() []CreateFormValidationCaseTest {
 	manager := factory.MockBase()
-	cases := []CreateFormValidationCaseTest {
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {},
+	cases := []CreateFormValidationCaseTest{
+		{
+			Form:      user.CreateForm{},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Username: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Manager: manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Username: "a",
 				Password: "a",
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Username: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Password: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: false,
 		},
-		CreateFormValidationCaseTest {
-			Form: user.CreateForm {
+		{
+			Form: user.CreateForm{
 				Username: "a",
 				Password: "a",
-				Manager: manager,
+				Manager:  manager,
 			},
 			NilResult: true,
 		},

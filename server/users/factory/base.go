@@ -10,16 +10,16 @@ import (
 	"github.com/danielbintar/angel/server/users/db"
 	"github.com/danielbintar/angel/server/users/model"
 
-	"github.com/danielbintar/angel/server-library/slice"
 	libFactory "github.com/danielbintar/angel/server-library/factory"
+	"github.com/danielbintar/angel/server-library/slice"
 )
 
 func MockBase(options ...string) *users.UserManager {
 	database := MockDatabase(options...)
 	publisher := libFactory.MockAsyncPublisher()
-	m := users.UserManager {
+	m := users.UserManager{
 		DatabaseManager: database,
-		Publisher: publisher,
+		Publisher:       publisher,
 	}
 	return &m
 }
@@ -40,7 +40,7 @@ func MockDatabase(options ...string) db.DatabaseManagerInterface {
 
 func NewBrokenDB() db.DatabaseManagerInterface {
 	database, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", "", "", "", "", ""))
-	return &db.DatabaseManager { DB: database }
+	return &db.DatabaseManager{DB: database}
 }
 
 type DummyDatabase struct {

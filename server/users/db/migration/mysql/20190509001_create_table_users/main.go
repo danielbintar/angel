@@ -22,5 +22,5 @@ func main() {
 		)  ENGINE=INNODB;`
 	}
 
-	migration.RunMySQL(&migration.MySQLQueryOpt { Query: query })
+	migration.RunMySQL(&migration.MySQLQueryOpt{Query: query})
 }

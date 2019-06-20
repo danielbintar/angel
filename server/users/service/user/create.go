@@ -4,8 +4,8 @@ import (
 	"github.com/danielbintar/angel/server/users"
 	"github.com/danielbintar/angel/server/users/model"
 
-	"github.com/danielbintar/angel/server-library/service"
 	modelLib "github.com/danielbintar/angel/server-library/model"
+	"github.com/danielbintar/angel/server-library/service"
 
 	"gopkg.in/validator.v2"
 
@@ -13,14 +13,14 @@ import (
 )
 
 type CreateForm struct {
-	Username string `json:"username" validate:"nonzero"`
-	Password string `json:"password" validate:"nonzero"`
+	Username string             `json:"username" validate:"nonzero"`
+	Password string             `json:"password" validate:"nonzero"`
 	Manager  *users.UserManager `    validate:"nonzero"`
 }
 
 func (self *CreateForm) Validate() *service.Error {
 	if err := validator.Validate(self); err != nil {
-		return &service.Error { Error: err.Error() }
+		return &service.Error{Error: err.Error()}
 	}
 
 	return nil
@@ -30,10 +30,10 @@ func (self *CreateForm) Perform() (interface{}, *service.Error) {
 	user, err := self.Manager.DatabaseManager.FindUserByUsername(self.Username)
 
 	if err != nil {
-		return nil, &service.Error { Error: err.Error(), Private: true }
+		return nil, &service.Error{Error: err.Error(), Private: true}
 	}
 	if user != nil {
-		return nil, &service.Error { Error: "username already used" }
+		return nil, &service.Error{Error: "username already used"}
 	}
 
 	user = &model.User{Username: self.Username}
@@ -45,7 +45,7 @@ func (self *CreateForm) Perform() (interface{}, *service.Error) {
 	user.Password = string(encryptedPassword)
 
 	if err := self.Manager.DatabaseManager.InsertUser(user); err != nil {
-		return nil, &service.Error { Error: err.Error(), Private: true }
+		return nil, &service.Error{Error: err.Error(), Private: true}
 	}
 
 	modelLib.Log("users", *user, self.Manager.Publisher)
