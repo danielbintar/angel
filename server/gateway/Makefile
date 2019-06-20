@@ -11,4 +11,4 @@ run: build
 	./main
 
 test:
-	ENVIRONMENT=test go test -v -coverprofile ./test-cov ./...
+	ENVIRONMENT=test go test -v -coverprofile ./test-cov `go list ./... | grep -v cmd`
