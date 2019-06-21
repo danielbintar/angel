@@ -39,7 +39,7 @@ func MockDatabase(options ...string) db.DatabaseManagerInterface {
 }
 
 func NewBrokenDB() db.DatabaseManagerInterface {
-	database, _ := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=true", "", "", "", "", ""))
+	database, _ := sql.Open("postgres", fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", "", "", "", "", ""))
 	return &db.DatabaseManager{DB: database}
 }
 
