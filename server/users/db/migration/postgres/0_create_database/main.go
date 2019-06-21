@@ -7,18 +7,19 @@ import (
 )
 
 func main() {
-	key := "MYSQL_DATABASE"
-	if os.Getenv("ENVIRONMENT") == "TEST" {
+	key := "POSTGRES_DATABASE"
+	if os.Getenv("ENVIRONMENT") == "test" {
 		key = "TEST_" + key
 	}
+
 	dbName := os.Getenv(key)
 
 	var query string
 	if len(os.Args) == 2 && os.Args[1] == "down" {
 		query = "DROP DATABASE IF EXISTS " + dbName
 	} else {
-		query = "CREATE DATABASE IF NOT EXISTS " + dbName
+		query = "CREATE DATABASE " + dbName
 	}
 
-	migration.RunMySQL(&migration.MySQLQueryOpt{Query: query, Base: true})
+	migration.RunPostgres(&migration.PostgresQueryOpt{Query: query, Base: true})
 }
