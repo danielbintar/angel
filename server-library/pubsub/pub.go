@@ -11,7 +11,7 @@ import (
 // use this for `it's ok to do this later` operation
 type AsyncPublisher interface {
 	Publish(id string, message string)
-	Close()
+	Close() error
 }
 
 // open new kafka connection
@@ -23,10 +23,14 @@ func NewKafkaAsyncProducer() AsyncPublisher {
 	config.Producer.Return.Errors = false
 
 	prefix := ""
-	if os.Getenv("ENVIRONMENT") == "test" { prefix = "TEST_" }
-	brokers := strings.Split(os.Getenv(prefix + "KAFKA_BROKERS"), ",")
+	if os.Getenv("ENVIRONMENT") == "test" {
+		prefix = "TEST_"
+	}
+	brokers := strings.Split(os.Getenv(prefix+"KAFKA_BROKERS"), ",")
 	kafkaProducer, err := sarama.NewAsyncProducer(brokers, config)
-	if err != nil { panic(err) }
+	if err != nil {
+		panic(err)
+	}
 	return &KafkaAsyncProducer{producer: kafkaProducer}
 }
 
@@ -34,8 +38,8 @@ type KafkaAsyncProducer struct {
 	producer sarama.AsyncProducer
 }
 
-func (self *KafkaAsyncProducer) Close() {
-	self.producer.AsyncClose()
+func (self *KafkaAsyncProducer) Close() error {
+	return self.producer.Close()
 }
 
 func (self *KafkaAsyncProducer) Publish(id string, message string) {

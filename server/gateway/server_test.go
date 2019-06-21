@@ -19,7 +19,9 @@ func TestServeHTTP(t *testing.T) {
 
 	t.Run("not found", func(t *testing.T) {
 		req, err := http.NewRequest("GET", "/healthz", nil)
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		rr := httptest.NewRecorder()
 		s.ServeHTTP(rr, req)
@@ -28,7 +30,9 @@ func TestServeHTTP(t *testing.T) {
 
 	t.Run("exists", func(t *testing.T) {
 		req, err := http.NewRequest("POST", "/users", nil)
-		if err != nil { t.Fatal(err) }
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		rr := httptest.NewRecorder()
 		s.ServeHTTP(rr, req)

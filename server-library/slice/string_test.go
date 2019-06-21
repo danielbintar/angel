@@ -23,61 +23,61 @@ type InStringTestCase struct {
 }
 
 func generateInStringTestCase() []InStringTestCase {
-	cases := []InStringTestCase {
-		InStringTestCase {
+	cases := []InStringTestCase{
+		{
 			Strings: []string{},
-			String: "",
-			Result: false,
+			String:  "",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{},
-			String: "a",
-			Result: false,
+			String:  "a",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"a"},
-			String: "",
-			Result: false,
+			String:  "",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"a"},
-			String: "A",
-			Result: false,
+			String:  "A",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"A"},
-			String: "a",
-			Result: false,
+			String:  "a",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"ab"},
-			String: "a",
-			Result: false,
+			String:  "a",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"a"},
-			String: "ab",
-			Result: false,
+			String:  "ab",
+			Result:  false,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"a"},
-			String: "a",
-			Result: true,
+			String:  "a",
+			Result:  true,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"A"},
-			String: "A",
-			Result: true,
+			String:  "A",
+			Result:  true,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"b", "A"},
-			String: "A",
-			Result: true,
+			String:  "A",
+			Result:  true,
 		},
-		InStringTestCase {
+		{
 			Strings: []string{"A", "b"},
-			String: "A",
-			Result: true,
+			String:  "A",
+			Result:  true,
 		},
 	}
 	return cases
