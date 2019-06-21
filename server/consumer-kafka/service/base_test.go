@@ -11,9 +11,11 @@ import (
 )
 
 func TestLoadConfig(t *testing.T) {
+	base := "../"
 	form := service.LoadConfigForm{
 		MicroName:    "dummy-micro",
 		ConsumerName: "valid-consumer",
+		Base:         &base,
 	}
 
 	configI, err := service.LoadConfig(form)

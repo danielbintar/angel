@@ -15,6 +15,8 @@ type LoadConfigValidationTestCase struct {
 	NilResult bool
 }
 
+var base = "../"
+
 func TestLoadConfigFormValidate(t *testing.T) {
 	cases := generateLoadConfigFormValidateTestCase()
 
@@ -33,6 +35,7 @@ func TestLoadConfigFormPerform(t *testing.T) {
 		form := service.LoadConfigForm{
 			MicroName:    "a",
 			ConsumerName: "a",
+			Base:         &base,
 		}
 
 		assert.Panics(t, func() { form.Perform() })
@@ -42,6 +45,7 @@ func TestLoadConfigFormPerform(t *testing.T) {
 		form := service.LoadConfigForm{
 			MicroName:    "dummy-micro",
 			ConsumerName: "wrong-configured-consumer",
+			Base:         &base,
 		}
 
 		assert.Panics(t, func() { form.Perform() })
@@ -51,6 +55,7 @@ func TestLoadConfigFormPerform(t *testing.T) {
 		form := service.LoadConfigForm{
 			MicroName:    "dummy-micro",
 			ConsumerName: "valid-consumer",
+			Base:         &base,
 		}
 
 		assert.NotPanics(t, func() { form.Perform() })
@@ -82,12 +87,14 @@ func generateLoadConfigFormValidateTestCase() []LoadConfigValidationTestCase {
 		{
 			Form: service.LoadConfigForm{
 				MicroName: "a",
+				Base:      &base,
 			},
 			NilResult: false,
 		},
 		{
 			Form: service.LoadConfigForm{
 				ConsumerName: "a",
+				Base:         &base,
 			},
 			NilResult: false,
 		},
@@ -95,6 +102,7 @@ func generateLoadConfigFormValidateTestCase() []LoadConfigValidationTestCase {
 			Form: service.LoadConfigForm{
 				MicroName:    "a",
 				ConsumerName: "a",
+				Base:         &base,
 			},
 			NilResult: true,
 		},
