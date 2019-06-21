@@ -2,11 +2,11 @@ package service
 
 import (
 	"fmt"
-	"os"
 	"io/ioutil"
+	"os"
 
-	"github.com/danielbintar/angel/server/consumer-kafka/model"
 	serviceLib "github.com/danielbintar/angel/server-library/service"
+	"github.com/danielbintar/angel/server/consumer-kafka/model"
 
 	"gopkg.in/validator.v2"
 
@@ -20,7 +20,7 @@ type LoadConfigForm struct {
 
 func (self *LoadConfigForm) Validate() *serviceLib.Error {
 	if err := validator.Validate(self); err != nil {
-		return &serviceLib.Error { Error: err.Error() }
+		return &serviceLib.Error{Error: err.Error()}
 	}
 
 	return nil
@@ -29,11 +29,15 @@ func (self *LoadConfigForm) Validate() *serviceLib.Error {
 func (self *LoadConfigForm) Perform() (interface{}, *serviceLib.Error) {
 	fmt.Println(os.Getwd())
 	yamlFile, err := ioutil.ReadFile("consumers/" + self.MicroName + "/" + self.ConsumerName + "/config.yaml")
-	if err != nil { panic(self.ConsumerName + " not found in " + self.MicroName) }
+	if err != nil {
+		panic(self.ConsumerName + " not found in " + self.MicroName)
+	}
 
 	var config model.Config
 	err = yaml.Unmarshal(yamlFile, &config)
-	if err != nil { panic("wrong configuration file on " + self.ConsumerName + " in " + self.MicroName) }
+	if err != nil {
+		panic("wrong configuration file on " + self.ConsumerName + " in " + self.MicroName)
+	}
 
 	return config, nil
 }

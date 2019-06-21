@@ -8,16 +8,22 @@ import (
 
 func main() {
 	microName := os.Getenv("MICRO")
-	if microName == "" { panic("MICRO not set") }
+	if microName == "" {
+		panic("MICRO not set")
+	}
 
 	consumerName := os.Getenv("CONSUMER")
-	if consumerName == "" { panic("CONSUMER not set") }
+	if consumerName == "" {
+		panic("CONSUMER not set")
+	}
 
-	form := service.LoadConfigForm {
-		MicroName: microName,
+	form := service.LoadConfigForm{
+		MicroName:    microName,
 		ConsumerName: consumerName,
 	}
 
 	_, err := service.LoadConfig(form)
-	if err != nil { panic(err.Error) }
+	if err != nil {
+		panic(err.Error)
+	}
 }

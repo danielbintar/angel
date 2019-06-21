@@ -30,8 +30,8 @@ func TestLoadConfigFormValidate(t *testing.T) {
 
 func TestLoadConfigFormPerform(t *testing.T) {
 	t.Run("config not exists", func(t *testing.T) {
-		form := service.LoadConfigForm {
-			MicroName: "a",
+		form := service.LoadConfigForm{
+			MicroName:    "a",
 			ConsumerName: "a",
 		}
 
@@ -39,8 +39,8 @@ func TestLoadConfigFormPerform(t *testing.T) {
 	})
 
 	t.Run("wrong configured config file", func(t *testing.T) {
-		form := service.LoadConfigForm {
-			MicroName: "dummy-micro",
+		form := service.LoadConfigForm{
+			MicroName:    "dummy-micro",
 			ConsumerName: "wrong-configured-consumer",
 		}
 
@@ -48,8 +48,8 @@ func TestLoadConfigFormPerform(t *testing.T) {
 	})
 
 	t.Run("config exists", func(t *testing.T) {
-		form := service.LoadConfigForm {
-			MicroName: "dummy-micro",
+		form := service.LoadConfigForm{
+			MicroName:    "dummy-micro",
 			ConsumerName: "valid-consumer",
 		}
 
@@ -74,26 +74,26 @@ func TestLoadConfigFormPerform(t *testing.T) {
 }
 
 func generateLoadConfigFormValidateTestCase() []LoadConfigValidationTestCase {
-	cases := []LoadConfigValidationTestCase {
-		LoadConfigValidationTestCase {
-			Form: service.LoadConfigForm {},
+	cases := []LoadConfigValidationTestCase{
+		{
+			Form:      service.LoadConfigForm{},
 			NilResult: false,
 		},
-		LoadConfigValidationTestCase {
-			Form: service.LoadConfigForm {
+		{
+			Form: service.LoadConfigForm{
 				MicroName: "a",
 			},
 			NilResult: false,
 		},
-		LoadConfigValidationTestCase {
-			Form: service.LoadConfigForm {
+		{
+			Form: service.LoadConfigForm{
 				ConsumerName: "a",
 			},
 			NilResult: false,
 		},
-		LoadConfigValidationTestCase {
-			Form: service.LoadConfigForm {
-				MicroName: "a",
+		{
+			Form: service.LoadConfigForm{
+				MicroName:    "a",
 				ConsumerName: "a",
 			},
 			NilResult: true,
