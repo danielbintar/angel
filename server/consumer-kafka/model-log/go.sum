@@ -4,6 +4,7 @@ github.com/Shopify/sarama v1.22.1 h1:exyEsKLGyCsDiqpV5Lr4slFi8ev2KiM3cP1KZ6vnCQ0
 github.com/Shopify/sarama v1.22.1/go.mod h1:FRzlvRpMFO/639zY1SDxUxkqH97Y0ndM5CbGj6oG3As=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/danielbintar/angel v0.0.0-20190615153924-ae329157d6ba h1:UWi2+fLwj2KyPOuXx8iHVcvH4uYvfE/7bjAqXyon8Gc=
+github.com/danielbintar/angel v0.0.0-20190621054140-5b3e5717f615 h1:jk3bBwoJyOlUQExMH5Tr018h5gJh3LRJkwrYC42w/2Y=
 github.com/danielbintar/angel/server-library v0.0.0-20190615153924-ae329157d6ba h1:jnNWrq8i9IOC6bLyHDLRxJ6cIrOB/imP0+2U/bqKOYY=
 github.com/danielbintar/angel/server-library v0.0.0-20190615153924-ae329157d6ba/go.mod h1:tx7uklMzPEnR7BjRCpj+hVUo/XJWPtpmfUpxWWrp4UU=
 github.com/danielbintar/angel/server/users v0.0.0-20190615153924-ae329157d6ba h1:ZSHV5hWC7/DB+BoW5JKT3CC0YjWTqkmK2UnulHhdDt0=

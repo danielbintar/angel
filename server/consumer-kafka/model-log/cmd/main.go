@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"os"
 	"os/signal"
@@ -10,37 +9,12 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/danielbintar/angel/server/consumer-kafka/model"
-	"github.com/danielbintar/angel/server/consumer-kafka/service"
-
 	"github.com/Shopify/sarama"
 )
 
+var topics = []string{"angel_users_model-log"}
+
 func main() {
-	microName := os.Getenv("MICRO")
-	if microName == "" {
-		panic("MICRO not set")
-	}
-
-	consumerName := os.Getenv("CONSUMER")
-	if consumerName == "" {
-		panic("CONSUMER not set")
-	}
-
-	form := service.LoadConfigForm{
-		MicroName:    microName,
-		ConsumerName: consumerName,
-	}
-
-	configI, serviceErr := service.LoadConfig(form)
-	if serviceErr != nil {
-		panic(serviceErr.Error)
-	}
-
-	byteData, _ := json.Marshal(configI)
-	var config model.Config
-	json.Unmarshal(byteData, &config)
-
 	version, err := sarama.ParseKafkaVersion("2.2.1")
 	if err != nil {
 		log.Panicf("Error parsing Kafka version: %v", err)
@@ -54,10 +28,15 @@ func main() {
 		ready: make(chan bool, 0),
 	}
 
-	client, err := sarama.NewConsumerGroup(strings.Split(os.Getenv("KAFKA_BROKERS"), ","), "angel-consumer-kafka", saramaConfig)
+	client, err := sarama.NewConsumerGroup(strings.Split(os.Getenv("KAFKA_BROKERS"), ","), "angel-model-log", saramaConfig)
 	if err != nil {
 		log.Panicf("Error creating consumer group client: %v", err)
 	}
+	defer func() {
+		if err = client.Close(); err != nil {
+			log.Panicf("Error closing consumer group client: %v", err)
+		}
+	}()
 
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -65,8 +44,9 @@ func main() {
 	go func() {
 		wg.Add(1)
 		defer wg.Done()
+
 		for {
-			if err := client.Consume(ctx, realTopics(config.Topics), &consumer); err != nil {
+			if err := client.Consume(ctx, topics, &consumer); err != nil {
 				log.Panicf("Error from consumer: %v", err)
 			}
 
@@ -80,6 +60,7 @@ func main() {
 
 	<-consumer.ready
 	log.Println("Kafka consumer up and running!...")
+	log.Println("Listening to " + strings.Join(topics, ", "))
 
 	sigterm := make(chan os.Signal, 1)
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
@@ -92,18 +73,6 @@ func main() {
 
 	cancel()
 	wg.Wait()
-
-	if err = client.Close(); err != nil {
-		log.Panicf("Error closing client: %v", err)
-	}
-}
-
-func realTopics(topics []string) []string {
-	var converteds []string
-	for _, topic := range topics {
-		converteds = append(converteds, "angel_"+topic)
-	}
-	return converteds
 }
 
 // Consumer represents a Sarama consumer group consumer
