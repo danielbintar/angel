@@ -15,13 +15,10 @@ import (
 var topics = []string{"angel_users_model-log"}
 
 func main() {
-	version, err := sarama.ParseKafkaVersion("2.2.1")
-	if err != nil {
-		log.Panicf("Error parsing Kafka version: %v", err)
-	}
+	defer log.Println("Shut down gracefuly success")
 
 	saramaConfig := sarama.NewConfig()
-	saramaConfig.Version = version
+	saramaConfig.Version = sarama.V2_2_0_0
 	saramaConfig.Consumer.Offsets.Initial = sarama.OffsetOldest
 
 	consumer := Consumer{
