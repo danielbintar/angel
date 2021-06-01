@@ -19,6 +19,7 @@ type AsyncPublisher interface {
 /// KAFKA_BROKERS
 func NewKafkaAsyncProducer() AsyncPublisher {
 	config := sarama.NewConfig()
+	config.Version = sarama.V2_2_0_0
 	config.Producer.Return.Successes = false
 	config.Producer.Return.Errors = false
 
